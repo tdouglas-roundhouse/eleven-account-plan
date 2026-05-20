@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eleven Systems — Account Plan</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-primary:#ffffff;--bg-secondary:#f5f4f1;--bg-tertiary:#eeede9;
+  --bg-info:#e6f1fb;--bg-success:#eaf3de;--bg-warning:#faeeda;--bg-danger:#fcebeb;
+  --text-primary:#1a1a18;--text-secondary:#5f5e5a;--text-tertiary:#888780;
+  --text-info:#185fa5;--text-success:#3b6d11;--text-warning:#854f0b;--text-danger:#a32d2d;
+  --border-light:rgba(0,0,0,0.10);--border-mid:rgba(0,0,0,0.18);--border-strong:rgba(0,0,0,0.28);
+  --border-info:#b5d4f4;--border-success:#c0dd97;--border-warning:#fac775;--border-danger:#f7c1c1;
+  --radius-md:8px;--radius-lg:12px;--font:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+  --green-pip:#1D9E75;--amber-pip:#EF9F27;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg-primary:#1e1e1c;--bg-secondary:#27271f;--bg-tertiary:#2e2e26;
+  --bg-info:#0c3352;--bg-success:#172f08;--bg-warning:#3d2406;--bg-danger:#3a1212;
+  --text-primary:#f0efe8;--text-secondary:#b4b2a9;--text-tertiary:#888780;
+  --text-info:#85b7eb;--text-success:#97c459;--text-warning:#ef9f27;--text-danger:#f09595;
+  --border-light:rgba(255,255,255,0.08);--border-mid:rgba(255,255,255,0.14);--border-strong:rgba(255,255,255,0.22);
+  --border-info:#185fa5;--border-success:#3b6d11;--border-warning:#854f0b;--border-danger:#a32d2d;
+  --green-pip:#5DCAA5;--amber-pip:#FAC775;
+}}
+body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-primary);min-height:100vh}
+.page-header{background:var(--bg-primary);border-bottom:0.5px solid var(--border-light);padding:18px 32px 14px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.page-header-left h1{font-size:17px;font-weight:600;letter-spacing:-0.01em}
+.page-header-left p{font-size:12px;color:var(--text-tertiary);margin-top:2px}
+.header-score{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.header-score .sc{font-size:12px;color:var(--text-secondary)}
+.forecast-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.fc-commit{background:var(--bg-success);color:var(--text-success);border:0.5px solid var(--border-success)}
+.fc-upside{background:var(--bg-info);color:var(--text-info);border:0.5px solid var(--border-info)}
+.fc-pipeline{background:var(--bg-warning);color:var(--text-warning);border:0.5px solid var(--border-warning)}
+.fc-omit{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
+.main{max-width:760px;margin:0 auto;padding:20px 24px 60px}
+.acct-bar{display:flex;gap:6px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.acct-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;transition:all 0.15s}
+.acct-btn:hover{background:var(--bg-tertiary)}
+.acct-btn.active{background:var(--bg-info);color:var(--text-info);border-color:var(--border-info);font-weight:500}
+.add-acct-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px dashed var(--border-mid);background:transparent;color:var(--text-tertiary);cursor:pointer}
+.add-acct-btn:hover{color:var(--text-secondary);border-color:var(--border-strong)}
+.slide-nav{display:flex;gap:4px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.slide-tab{font-size:12px;font-family:var(--font);padding:5px 12px;border-radius:20px;border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:all 0.12s}
+.slide-tab:hover{background:var(--bg-tertiary)}
+.slide-tab.active{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary)}
+.slide{display:none;background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:22px 24px 24px}
+.slide.visible{display:block}
+.slide-label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:5px}
+.slide-title{font-size:18px;font-weight:600;letter-spacing:-0.01em;margin-bottom:16px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.field-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+.field-full{margin-bottom:10px}
+.field-label{font-size:11px;color:var(--text-tertiary);margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:center;gap:5px}
+.fmt-hint{font-size:10px;color:var(--text-tertiary);font-weight:400;text-transform:none;letter-spacing:0;opacity:0.75}
+.field-input{width:100%;font-size:13px;font-family:var(--font);color:var(--text-primary);background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:7px 10px;resize:none;outline:none;line-height:1.5;transition:border-color 0.15s}
+.field-input:focus{border-color:var(--border-strong)}
+.field-input::placeholder{color:var(--text-tertiary)}
+.field-input.fmt-ok{border-color:var(--border-success)}
+.field-input.fmt-err{border-color:var(--border-danger)}
+select.field-input{cursor:pointer}
+.sec-div{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);padding:14px 0 8px;border-top:0.5px solid var(--border-light);margin-top:4px}
+.sec-div.first{border-top:none;margin-top:0;padding-top:0}
+.chip-group{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.chip{font-size:11px;font-family:var(--font);padding:3px 10px;border-radius:4px;border:0.5px solid var(--border-mid);background:var(--bg-secondary);color:var(--text-secondary);cursor:pointer;transition:all 0.1s}
+.chip:hover{background:var(--bg-tertiary)}
+.chip.sel-green{background:var(--bg-success);color:var(--text-success);border-color:var(--border-success);font-weight:500}
+.chip.sel-amber{background:var(--bg-warning);color:var(--text-warning);border-color:var(--border-warning);font-weight:500}
+.chip.sel-red{background:var(--bg-danger);color:var(--text-danger);border-color:var(--border-danger);font-weight:500}
+.chip.sel-blue{background:var(--bg-info);color:var(--text-info);border-color:var(--border-info);font-weight:500}
+.stk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:10px}
+.stk-card{background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:10px 12px;position:relative;padding-bottom:28px}
+.role-badge{font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;margin-bottom:8px;display:inline-block}
+.role-economic-buyer{background:var(--bg-info);color:var(--text-info);border:0.5px solid var(--border-info)}
+.role-champion{background:var(--bg-success);color:var(--text-success);border:0.5px solid var(--border-success)}
+.role-coach{background:var(--bg-warning);color:var(--text-warning);border:0.5px solid var(--border-warning)}
+.role-blocker{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
+.role-neutral{background:var(--bg-tertiary);color:var(--text-secondary);border:0.5px solid var(--border-mid)}
+.stk-input{background:transparent;border:none;outline:none;font-family:var(--font);width:100%}
+.stk-name{font-size:13px;font-weight:500;color:var(--text-primary)}
+.stk-sub{font-size:11px;color:var(--text-tertiary)}
+.stk-win{font-size:11px;color:var(--text-secondary);border-bottom:0.5px solid var(--border-light);padding:2px 0;margin-top:6px}
+.sc-remove{position:absolute;bottom:8px;right:8px;font-size:11px;color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-family:var(--font)}
+.sc-remove:hover{color:var(--text-danger)}
+.pov-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.pov-card{background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:10px 12px}
+.pov-q{font-size:11px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+.obj-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px}
+.obj-table th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);padding:6px 10px;text-align:left;border-bottom:0.5px solid var(--border-mid)}
+.obj-table td{padding:4px 10px;border-bottom:0.5px solid var(--border-light);vertical-align:top}
+.obj-table tr:last-child td{border-bottom:none}
+.obj-table td:first-child{color:var(--text-secondary);white-space:nowrap;font-weight:500}
+.medd-score-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.medd-score-card{background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:10px 12px;text-align:center}
+.medd-score-card .lbl{font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}
+.medd-score-card .val{font-size:20px;font-weight:600;color:var(--text-primary);line-height:1}
+.medd-section{background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);margin-bottom:6px;overflow:hidden}
+.medd-section-header{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;user-select:none;transition:background 0.12s}
+.medd-section-header:hover{background:var(--bg-tertiary)}
+.medd-left{display:flex;align-items:center;gap:10px}
+.medd-icon{width:28px;height:28px;border-radius:var(--radius-md);background:var(--bg-primary);border:0.5px solid var(--border-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.medd-icon svg{width:14px;height:14px;stroke:var(--text-tertiary);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.medd-title-row{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.medd-title{font-size:13px;font-weight:500}
+.blocker-tag{font-size:10px;font-weight:500;color:var(--text-danger);background:var(--bg-danger);padding:2px 5px;border-radius:3px;border:0.5px solid var(--border-danger)}
+.medd-desc{font-size:11px;color:var(--text-tertiary)}
+.pip-row{display:flex;gap:3px;margin-top:3px}
+.pip{width:7px;height:7px;border-radius:50%;background:var(--border-mid)}
+.pip.filled{background:var(--green-pip)}
+.pip.partial{background:var(--amber-pip)}
+.chevron{width:14px;height:14px;flex-shrink:0;stroke:var(--text-tertiary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform 0.2s}
+.chevron.open{transform:rotate(180deg)}
+.medd-body{border-top:0.5px solid var(--border-light);padding:4px 14px 12px}
+.medd-question{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:0.5px solid var(--border-light)}
+.medd-question:last-of-type{border-bottom:none}
+.q-text{font-size:13px;line-height:1.5;flex:1}
+.q-tag{font-size:10px;color:var(--text-tertiary);margin-top:2px}
+.tog-group{display:flex;gap:4px;flex-shrink:0;margin-top:1px}
+.tog{font-size:12px;font-family:var(--font);padding:3px 10px;border-radius:5px;border:0.5px solid var(--border-mid);background:transparent;color:var(--text-secondary);cursor:pointer;transition:all 0.1s}
+.tog:hover{background:var(--bg-secondary)}
+.tog.yes{background:var(--bg-success);color:var(--text-success);border-color:var(--border-success);font-weight:500}
+.tog.no{background:var(--bg-danger);color:var(--text-danger);border-color:var(--border-danger);font-weight:500}
+.medd-notes{padding:6px 0 0}
+.medd-notes textarea{width:100%;font-size:12px;font-family:var(--font);color:var(--text-primary);background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:6px 9px;resize:vertical;outline:none;line-height:1.5}
+.medd-notes textarea:focus{border-color:var(--border-strong)}
+.medd-notes textarea::placeholder{color:var(--text-tertiary)}
+.gaps-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:6px}
+.gaps-table th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);padding:5px 8px;text-align:left;border-bottom:0.5px solid var(--border-mid);white-space:nowrap}
+.gaps-table td{padding:5px 8px;border-bottom:0.5px solid var(--border-light);vertical-align:middle}
+.gaps-table tr:last-child td{border-bottom:none}
+.gap-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;display:inline-block;white-space:nowrap}
+.gap-blocker{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
+.gap-custom{background:var(--bg-warning);color:var(--text-warning);border:0.5px solid var(--border-warning)}
+.gaps-table td input,.gaps-table td select{width:100%;font-size:12px;font-family:var(--font);color:var(--text-primary);background:transparent;border:none;outline:none;padding:2px 0;line-height:1.4}
+.gaps-table td input::placeholder{color:var(--text-tertiary)}
+.gaps-empty{font-size:12px;color:var(--text-success);padding:8px 0;display:flex;align-items:center;gap:6px}
+.gaps-empty-dot{width:8px;height:8px;border-radius:50%;background:var(--green-pip);flex-shrink:0}
+.gaps-add-btn{font-size:11px;font-family:var(--font);padding:4px 10px;border-radius:var(--radius-md);border:0.5px dashed var(--border-mid);background:transparent;color:var(--text-tertiary);cursor:pointer;margin-top:2px}
+.gaps-add-btn:hover{color:var(--text-secondary)}
+.gap-rm{font-size:11px;color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-family:var(--font)}
+.gap-rm:hover{color:var(--text-danger)}
+.ask-box{background:var(--bg-warning);border:0.5px solid var(--border-warning);border-radius:var(--radius-md);padding:12px 14px;margin-bottom:12px}
+.ask-label{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-warning);margin-bottom:5px}
+.ask-box textarea{background:transparent;border:none;color:var(--text-primary);font-size:13px;font-family:var(--font);width:100%;resize:none;outline:none;line-height:1.5}
+.ask-box textarea::placeholder{color:var(--text-warning);opacity:0.6}
+.map-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px}
+.map-table th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);padding:6px 8px;text-align:left;border-bottom:0.5px solid var(--border-mid)}
+.map-table td{padding:4px 8px;border-bottom:0.5px solid var(--border-light);vertical-align:top}
+.map-table tr:last-child td{border-bottom:none}
+.map-table td input,.map-table td select{width:100%;font-size:12px;font-family:var(--font);color:var(--text-primary);background:transparent;border:none;outline:none;padding:3px 0}
+.map-table td input::placeholder{color:var(--text-tertiary)}
+.add-row-btn{font-size:12px;font-family:var(--font);padding:5px 12px;border-radius:var(--radius-md);border:0.5px dashed var(--border-mid);background:transparent;color:var(--text-tertiary);cursor:pointer;margin-bottom:10px}
+.add-row-btn:hover{color:var(--text-secondary)}
+.slide-progress{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.prog-dot{width:8px;height:8px;border-radius:50%;background:var(--border-mid);cursor:pointer;transition:all 0.15s}
+.prog-dot.active{background:var(--text-primary);transform:scale(1.2)}
+.prog-dot.filled{background:var(--green-pip)}
+.prog-nav{display:flex;gap:6px;margin-left:auto}
+.prog-nav button{font-size:12px;font-family:var(--font);padding:4px 12px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer}
+.prog-nav button:hover{background:var(--bg-tertiary)}
+.prog-nav button:disabled{opacity:0.35;cursor:default}
+.bottom-bar{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+.action-btn{font-size:13px;font-family:var(--font);padding:8px 16px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;font-weight:500;transition:background 0.12s}
+.action-btn:hover{background:var(--bg-tertiary)}
+.action-btn.primary{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary)}
+.action-btn.primary:hover{opacity:0.85}
+@media(max-width:540px){
+  .field-grid,.pov-grid{grid-template-columns:1fr}
+  .field-grid-3{grid-template-columns:1fr 1fr}
+  .page-header{padding:14px 16px 10px}
+  .main{padding:14px 12px 40px}
+  .medd-score-bar{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="page-header-left">
+    <h1>Eleven Systems — Account Plan</h1>
+    <p>Unified account plan + MEDDPICC qualifier</p>
+  </div>
+  <div class="header-score" id="headerScore"></div>
+</div>
+<div class="main">
+  <div class="acct-bar" id="acctBar"></div>
+  <div class="slide-nav" id="slideNav"></div>
+  <div class="slide-progress" id="slideProgress"></div>
+  <div id="slidesContainer"></div>
+  <div class="bottom-bar">
+    <button class="action-btn" onclick="addAcct()">+ Add account</button>
+    <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   FORMATTERS
+   ================================================================ */
+
+function formatCurrency(raw) {
+  if (!raw || !raw.trim()) return '';
+  let s = raw.trim().replace(/,/g, '');
+  const neg = s.startsWith('-');
+  if (neg) s = s.slice(1);
+  s = s.replace(/^\$\s*/, '');
+  let num = null;
+  const lower = s.toLowerCase();
+  if (/^[\d.]+t$/.test(lower))      num = parseFloat(lower) * 1e12;
+  else if (/^[\d.]+b$/.test(lower)) num = parseFloat(lower) * 1e9;
+  else if (/^[\d.]+m$/.test(lower)) num = parseFloat(lower) * 1e6;
+  else if (/^[\d.]+k$/.test(lower)) num = parseFloat(lower) * 1e3;
+  else if (/^[\d.]+$/.test(lower))  num = parseFloat(lower);
+  if (num === null || isNaN(num)) return raw;
+  if (neg) num = -num;
+  const abs = Math.abs(num);
+  if (abs >= 1e12) return '$' + (num / 1e12).toFixed(num % 1e12 === 0 ? 0 : 1) + 'T';
+  if (abs >= 1e9)  return '$' + (num / 1e9).toFixed(num % 1e9 === 0 ? 0 : 1) + 'B';
+  if (abs >= 1e6)  return '$' + (num / 1e6).toFixed(num % 1e6 === 0 ? 0 : 1) + 'M';
+  if (abs >= 1e3)  return '$' + (num / 1e3).toFixed(num % 1e3 === 0 ? 0 : 1) + 'K';
+  return '$' + Math.round(num).toLocaleString();
+}
+
+function formatQuarter(raw) {
+  if (!raw || !raw.trim()) return '';
+  const s = raw.trim();
+  if (/^Q[1-4]\s+20\d{2}$/.test(s)) return s;
+  const m = s.match(/[qQ]?([1-4])[\s\-\/]*(20)?(\d{2,4})/);
+  if (m) {
+    let yr = m[3];
+    if (yr.length === 2) yr = '20' + yr;
+    return 'Q' + m[1] + ' ' + yr;
+  }
+  const qonly = s.match(/^[qQ]([1-4])$/);
+  if (qonly) return 'Q' + qonly[1] + ' ' + new Date().getFullYear();
+  return raw;
+}
+
+function isCurrencyValid(f) {
+  return /^\$[\d.]+[KMBT]?$/.test(f) || /^\$[\d,]+$/.test(f);
+}
+function isQuarterValid(f) {
+  return /^Q[1-4]\s+20\d{2}$/.test(f);
+}
+
+function applyFmt(el, formatted, valid) {
+  el.value = formatted;
+  el.classList.toggle('fmt-ok', valid && formatted !== '');
+  el.classList.toggle('fmt-err', !valid && formatted !== '');
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function attachFormatter(el, type) {
+  if (!el) return;
+  el.addEventListener('blur', () => {
+    if (type === 'currency') {
+      const f = formatCurrency(el.value);
+      applyFmt(el, f, isCurrencyValid(f));
+    } else if (type === 'quarter') {
+      const f = formatQuarter(el.value);
+      applyFmt(el, f, isQuarterValid(f));
+    }
+  });
+  el.addEventListener('focus', () => {
+    el.classList.remove('fmt-ok', 'fmt-err');
+  });
+}
+
+function attachFormatters() {
+  ['snapshot.currentArr', 'snapshot.targetArr'].forEach(path => {
+    attachFormatter(document.querySelector(`[data-f="${path}"]`), 'currency');
+  });
+  ['snapshot.renewalQ', 'pov.obj1date', 'pov.obj2date', 'pov.obj3date'].forEach(path => {
+    attachFormatter(document.querySelector(`[data-f="${path}"]`), 'quarter');
+  });
+}
+
+/* ================================================================
+   DATA MODEL
+   ================================================================ */
+
+const SLIDES = [
+  { id: 'snapshot',     label: 'Section 1', title: 'Account snapshot',        icon: '📊' },
+  { id: 'stakeholders', label: 'Section 2', title: 'Stakeholder map',          icon: '🗺' },
+  { id: 'pov',          label: 'Section 3', title: 'Account POV',              icon: '💡' },
+  { id: 'opportunity',  label: 'Section 4', title: 'Opportunity & MEDDPICC',   icon: '🎯' },
+  { id: 'map',          label: 'Section 5', title: 'Mutual action plan',       icon: '📋' }
+];
+
+const MEDD = [
+  { id: 'metrics', title: 'Metrics', desc: 'Does the champion quantify the pain?', blocker: false,
+    icon: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+    questions: [
+      { text: 'Champion can articulate current cost of fragmented reporting — time, advisor fees, or coordination overhead', tag: 'quantified pain' },
+      { text: 'A specific metric has been identified (hours/week, number of systems, reporting lag) that Eleven directly reduces', tag: 'success metric' },
+      { text: "Champion has linked the metric to a decision-maker's stated priority (consolidation, control, or cost)", tag: 'exec alignment' },
+      { text: 'Baseline has been established or champion will help establish it before demo', tag: 'baseline' }
+    ]
+  },
+  { id: 'economic_buyer', title: 'Economic buyer', desc: 'Is the principal or CIO reachable?', blocker: true,
+    icon: '<circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/><line x1="19" y1="11" x2="19" y2="17"/><line x1="16" y1="14" x2="22" y2="14"/>',
+    questions: [
+      { text: 'Champion has named the principal, CIO, or managing director who controls platform spend', tag: 'EB identified' },
+      { text: 'Champion has direct access to EB — not filtered through a gatekeeping layer', tag: 'EB access' },
+      { text: 'EB has expressed a view on consolidating family office tech or reducing advisor dependency', tag: 'EB awareness' },
+      { text: 'A path to an EB-attended meeting or presentation has been discussed', tag: 'EB meeting path' }
+    ]
+  },
+  { id: 'decision_criteria', title: 'Decision criteria', desc: "Do we know how they'll evaluate?", blocker: false,
+    icon: '<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>',
+    questions: [
+      { text: 'Champion has described how a platform like Eleven would be evaluated (data security, breadth of integrations, UX for principal)', tag: 'eval criteria' },
+      { text: "Eleven's differentiation has been mapped to their stated criteria — not a generic pitch", tag: 'differentiation fit' },
+      { text: 'Incumbent solutions (spreadsheets, Addepar, Orion, custom-built) have been explicitly compared', tag: 'competitive map' },
+      { text: 'Family office compliance or privacy requirements have been surfaced and addressed', tag: 'compliance' }
+    ]
+  },
+  { id: 'decision_process', title: 'Decision process', desc: 'Is the path to onboarding clear?', blocker: true,
+    icon: '<line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 01-9 9"/>',
+    questions: [
+      { text: 'Champion has described the internal steps required to approve a new platform (security review, legal, EB sign-off)', tag: 'process mapped' },
+      { text: 'A proof-of-concept or structured onboarding scope has been agreed or proposed', tag: 'PoC defined' },
+      { text: 'Timeline to first value milestone has been discussed — not open-ended', tag: 'timeline' },
+      { text: 'Champion has confirmed they can move without a lengthy RFP or procurement cycle', tag: 'cycle speed' }
+    ]
+  },
+  { id: 'data_integration', title: 'Data & integration readiness', desc: 'Can they actually onboard? (Most common blocker)', blocker: true,
+    icon: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
+    questions: [
+      { text: 'Champion understands what data sources Eleven needs access to (custodians, estate docs, calendars, reporting feeds)', tag: 'data scope known' },
+      { text: "No hard blocker on data sharing — legal, privacy counsel, or existing vendor lock-in has been acknowledged and isn't disqualifying", tag: 'data clearance' },
+      { text: 'Champion or a named colleague owns the data/IT side and is willing to engage', tag: 'data owner named' },
+      { text: 'At least one integration point (e.g. Addepar, Schwab, a custodian feed) has been confirmed as accessible', tag: 'integration confirmed' }
+    ]
+  },
+  { id: 'champion', title: 'Champion', desc: 'Do we have a true internal sponsor?', blocker: true,
+    icon: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    questions: [
+      { text: 'Champion has power or strong influence over the platform decision — not just an evaluator', tag: 'power' },
+      { text: 'Champion has a personal win tied to Eleven succeeding (time savings, credibility with principal, career)', tag: 'personal win' },
+      { text: 'Champion has proactively shared intel, arranged introductions, or advocated internally', tag: 'active selling' },
+      { text: 'Champion has not gone quiet — last meaningful engagement was within 3 weeks', tag: 'active engagement' }
+    ]
+  },
+  { id: 'competition', title: 'Competition & inertia', desc: "What are we actually competing against?", blocker: false,
+    icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>',
+    questions: [
+      { text: "The real competitor has been named — spreadsheets, existing wealth platform, internal ops team, or custom-built solution", tag: 'competition named' },
+      { text: "Champion acknowledges status quo has a cost — it's not 'good enough' in their view", tag: 'status quo cost' },
+      { text: 'No competing platform evaluation is in progress that would freeze the decision', tag: 'no parallel eval' },
+      { text: "Eleven's UHNW-specific positioning (vs. generic wealth tools) has resonated with champion or EB", tag: 'positioning fit' }
+    ]
+  }
+];
+
+const AUM_RANGES = ['<$100M', '$100M–$500M', '$500M–$1B', '$1B–$5B', '$5B–$10B', '$10B+'];
+
+function freshData() {
+  return {
+    snapshot: { firmName: '', firmType: '', aum: '', contactCount: '', healthStatus: '', journey: '', currentArr: '', targetArr: '', renewalQ: '', notes: '', stakeholderGaps: '' },
+    stakeholders: [],
+    pov: { whyChange: '', whyNow: '', whyUs: '', whatSolution: '', objective1: '', obj1date: '', objective2: '', obj2date: '', objective3: '', obj3date: '' },
+    opportunity: { whitespace: '', competitive: '', incumbents: '', competitiveStrategy: '', meddAnswers: {}, meddNotes: {}, gapOverrides: { __manual: [] } },
+    map: { rows: [], topAsk: '', lastEngagement: '', nextTouch: '' }
+  };
+}
+
+let accounts = [{ name: 'New account', currentSlide: 0, openMedd: new Set(['metrics']), data: freshData() }];
+let currentAcct = 0;
+function acct() { return accounts[currentAcct]; }
+function d() { return acct().data; }
+function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+/* ================================================================
+   MEDDPICC SCORING
+   ================================================================ */
+
+function meddYes(id, count) {
+  const a = d().opportunity.meddAnswers;
+  let y = 0;
+  for (let i = 0; i < count; i++) if (a[id + '_' + i] === 'yes') y++;
+  return y;
+}
+function meddStatus(id, count) {
+  const y = meddYes(id, count);
+  if (y === count) return 'full';
+  if (y >= Math.ceil(count / 2)) return 'partial';
+  return 'low';
+}
+function calcScore() {
+  let yes = 0, total = 0;
+  MEDD.forEach(s => s.questions.forEach((_, i) => { total++; if (d().opportunity.meddAnswers[s.id + '_' + i] === 'yes') yes++; }));
+  return { yes, total };
+}
+function calcForecast() {
+  const a = d().opportunity.meddAnswers;
+  const bl = MEDD.filter(s => s.blocker);
+  let bY = 0, bT = 0, tY = 0, tQ = 0;
+  bl.forEach(s => s.questions.forEach((_, i) => { bT++; if (a[s.id + '_' + i] === 'yes') bY++; }));
+  MEDD.forEach(s => s.questions.forEach((_, i) => { tQ++; if (a[s.id + '_' + i] === 'yes') tY++; }));
+  const p = tY / tQ, bp = bY / bT;
+  if (bp >= 0.75 && p >= 0.70) return 'Commit';
+  if (bp >= 0.55 && p >= 0.50) return 'Upside';
+  if (p >= 0.25 || tY >= 5) return 'Pipeline';
+  return 'Omit';
+}
+const FC_CLASS = { Commit: 'fc-commit', Upside: 'fc-upside', Pipeline: 'fc-pipeline', Omit: 'fc-omit' };
+
+/* ================================================================
+   RENDER
+   ================================================================ */
+
+function render() {
+  renderAcctBar();
+  renderSlideNav();
+  renderProgress();
+  renderCurrentSlide();
+  renderHeaderScore();
+}
+
+function renderHeaderScore() {
+  const el = document.getElementById('headerScore');
+  const { yes, total } = calcScore();
+  const fc = calcForecast();
+  el.innerHTML = `<span class="sc">${yes}/${total}</span><span class="forecast-badge ${FC_CLASS[fc]}">${fc}</span>`;
+}
+
+function renderAcctBar() {
+  const bar = document.getElementById('acctBar');
+  bar.innerHTML = '';
+  accounts.forEach((a, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'acct-btn' + (i === currentAcct ? ' active' : '');
+    btn.textContent = a.name;
+    btn.onclick = () => switchAcct(i);
+    btn.ondblclick = () => { const n = prompt('Rename:', a.name); if (n && n.trim()) { accounts[i].name = n.trim(); renderAcctBar(); } };
+    bar.appendChild(btn);
+  });
+  const add = document.createElement('button');
+  add.className = 'add-acct-btn';
+  add.textContent = '+ Add account';
+  add.onclick = addAcct;
+  bar.appendChild(add);
+}
+
+function renderSlideNav() {
+  const nav = document.getElementById('slideNav');
+  nav.innerHTML = '';
+  SLIDES.forEach((s, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'slide-tab' + (i === acct().currentSlide ? ' active' : '');
+    btn.textContent = s.icon + ' ' + s.title;
+    btn.onclick = () => { acct().currentSlide = i; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function renderProgress() {
+  const bar = document.getElementById('slideProgress');
+  bar.innerHTML = '';
+  SLIDES.forEach((s, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'prog-dot' + (i === acct().currentSlide ? ' active' : isSlideFilled(s.id) ? ' filled' : '');
+    dot.title = s.title;
+    dot.onclick = () => { acct().currentSlide = i; render(); };
+    bar.appendChild(dot);
+  });
+  const nav = document.createElement('div');
+  nav.className = 'prog-nav';
+  const prev = document.createElement('button');
+  prev.textContent = '← Prev';
+  prev.disabled = acct().currentSlide === 0;
+  prev.onclick = () => { if (acct().currentSlide > 0) { acct().currentSlide--; render(); } };
+  const next = document.createElement('button');
+  next.textContent = 'Next →';
+  next.disabled = acct().currentSlide === SLIDES.length - 1;
+  next.onclick = () => { if (acct().currentSlide < SLIDES.length - 1) { acct().currentSlide++; render(); } };
+  nav.appendChild(prev);
+  nav.appendChild(next);
+  bar.appendChild(nav);
+}
+
+function isSlideFilled(id) {
+  if (id === 'snapshot') return !!(d().snapshot.firmName && d().snapshot.firmType && d().snapshot.healthStatus);
+  if (id === 'stakeholders') return d().stakeholders.length > 0;
+  if (id === 'pov') return !!(d().pov.whyChange && d().pov.whyNow && d().pov.whyUs);
+  if (id === 'opportunity') return calcScore().yes > 0;
+  if (id === 'map') return d().map.rows.length > 0 && !!d().map.topAsk;
+  return false;
+}
+
+function renderCurrentSlide() {
+  const c = document.getElementById('slidesContainer');
+  c.innerHTML = '';
+  const sid = SLIDES[acct().currentSlide].id;
+  const slide = document.createElement('div');
+  slide.className = 'slide visible';
+  slide.innerHTML = buildSlide(sid);
+  c.appendChild(slide);
+  attachListeners();
+  attachFormatters();
+}
+
+/* ================================================================
+   SLIDE BUILDERS
+   ================================================================ */
+
+function buildSlide(id) {
+  if (id === 'snapshot')     return buildSnapshot();
+  if (id === 'stakeholders') return buildStakeholders();
+  if (id === 'pov')          return buildPov();
+  if (id === 'opportunity')  return buildOpportunity();
+  if (id === 'map')          return buildMap();
+  return '';
+}
+
+function buildSnapshot() {
+  const s = d().snapshot;
+  return `<div class="slide-label">Section 1</div>
+<div class="slide-title">Account snapshot</div>
+<div class="sec-div first">Firm overview</div>
+<div class="field-grid">
+  <div>
+    <div class="field-label">Firm name</div>
+    <input class="field-input" data-f="snapshot.firmName" placeholder="e.g. Strauss Family Office" value="${esc(s.firmName)}">
+  </div>
+  <div>
+    <div class="field-label">Account type</div>
+    <select class="field-input" data-f="snapshot.firmType">
+      <option value="">Select…</option>
+      ${['Single-family office', 'Multi-family office', 'Institutional WM', 'RIA', 'Private bank'].map(v => `<option ${s.firmType === v ? 'selected' : ''}>${v}</option>`).join('')}
+    </select>
+  </div>
+</div>
+<div class="field-grid-3">
+  <div>
+    <div class="field-label">Est. AUM</div>
+    <select class="field-input" data-f="snapshot.aum">
+      <option value="">Select range…</option>
+      ${AUM_RANGES.map(v => `<option ${s.aum === v ? 'selected' : ''}>${v}</option>`).join('')}
+    </select>
+  </div>
+  <div>
+    <div class="field-label">Key contacts</div>
+    <input class="field-input" data-f="snapshot.contactCount" placeholder="e.g. 3" value="${esc(s.contactCount)}">
+  </div>
+  <div>
+    <div class="field-label">Renewal / close <span class="fmt-hint">Q3 2025</span></div>
+    <input class="field-input" data-f="snapshot.renewalQ" placeholder="Q3 2025" value="${esc(s.renewalQ)}">
+  </div>
+</div>
+<div class="sec-div">Pipeline & health</div>
+<div class="field-grid">
+  <div>
+    <div class="field-label">Current ARR <span class="fmt-hint">48k → $48K</span></div>
+    <input class="field-input" data-f="snapshot.currentArr" placeholder="$0 (prospect)" value="${esc(s.currentArr)}">
+  </div>
+  <div>
+    <div class="field-label">Target ARR <span class="fmt-hint">120k → $120K</span></div>
+    <input class="field-input" data-f="snapshot.targetArr" placeholder="e.g. $48K" value="${esc(s.targetArr)}">
+  </div>
+</div>
+<div class="field-grid">
+  <div>
+    <div class="field-label">Journey stage</div>
+    <div class="chip-group">
+      ${['Land', 'Adopt', 'Expand', 'Renew'].map(v => `<button class="chip${s.journey === v ? ' sel-blue' : ''}" onclick="setDeep('snapshot.journey','${v}');render()">${v}</button>`).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="field-label">Account health</div>
+    <div class="chip-group">
+      <button class="chip${s.healthStatus === 'Green' ? ' sel-green' : ''}" onclick="setDeep('snapshot.healthStatus','Green');render()">Green</button>
+      <button class="chip${s.healthStatus === 'Amber' ? ' sel-amber' : ''}" onclick="setDeep('snapshot.healthStatus','Amber');render()">Amber</button>
+      <button class="chip${s.healthStatus === 'Red' ? ' sel-red' : ''}" onclick="setDeep('snapshot.healthStatus','Red');render()">Red</button>
+    </div>
+  </div>
+</div>
+<div class="sec-div">Context & risks</div>
+<div class="field-full">
+  <div class="field-label">Brief — situation, key risks, top opportunities</div>
+  <textarea class="field-input" rows="3" data-f="snapshot.notes" placeholder="2–4 sentences on what matters most for this account right now…">${esc(s.notes)}</textarea>
+</div>`;
+}
+
+function buildStakeholders() {
+  const stk = d().stakeholders;
+  const cards = stk.map((s, i) => {
+    const rc = 'role-' + s.role.toLowerCase().replace(/\s+/g, '-');
+    return `<div class="stk-card">
+  <span class="role-badge ${rc}">${s.role}</span>
+  <div style="margin-bottom:3px"><input class="stk-input stk-name" data-stk="${i}.name" value="${esc(s.name)}" placeholder="Name"></div>
+  <div><input class="stk-input stk-sub" data-stk="${i}.title" value="${esc(s.title)}" placeholder="Title / role"></div>
+  <div style="margin-top:6px">
+    <div class="field-label">Personal win</div>
+    <input class="stk-input stk-win" data-stk="${i}.win" value="${esc(s.win || '')}" placeholder="What do they gain from yes?">
+  </div>
+  <div style="margin-top:8px">
+    <div class="chip-group" style="flex-wrap:nowrap">
+      <button class="chip${s.sentiment === 'Advocate' ? ' sel-green' : ''}" style="font-size:10px;padding:2px 7px" onclick="setStkField(${i},'sentiment','Advocate');render()">Advocate</button>
+      <button class="chip${s.sentiment === 'Neutral' ? ' sel-amber' : ''}" style="font-size:10px;padding:2px 7px" onclick="setStkField(${i},'sentiment','Neutral');render()">Neutral</button>
+      <button class="chip${s.sentiment === 'Risk' ? ' sel-red' : ''}" style="font-size:10px;padding:2px 7px" onclick="setStkField(${i},'sentiment','Risk');render()">Risk</button>
+    </div>
+  </div>
+  <button class="sc-remove" onclick="removeStakeholder(${i})">remove</button>
+</div>`;
+  }).join('');
+  return `<div class="slide-label">Section 2</div>
+<div class="slide-title">Stakeholder map</div>
+<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+  ${['Economic buyer', 'Champion', 'Coach', 'Blocker', 'Neutral'].map(r => `<button class="action-btn" style="font-size:12px;padding:5px 12px" onclick="addStakeholder('${r}')">+ ${r}</button>`).join('')}
+</div>
+<div class="stk-grid">${cards || '<div style="font-size:13px;color:var(--text-tertiary);padding:10px 0">No stakeholders yet.</div>'}</div>
+<div class="sec-div">Access & coverage gaps</div>
+<div class="field-full">
+  <div class="field-label">Who are we missing? What access do we need?</div>
+  <textarea class="field-input" rows="2" data-f="snapshot.stakeholderGaps" placeholder="e.g. No direct access to principal yet — working through Chief of Staff…">${esc(d().snapshot.stakeholderGaps)}</textarea>
+</div>`;
+}
+
+function buildPov() {
+  const p = d().pov;
+  return `<div class="slide-label">Section 3</div>
+<div class="slide-title">Account POV</div>
+<div class="pov-grid">
+  <div class="pov-card">
+    <div class="pov-q">Why change?</div>
+    <textarea class="field-input" rows="3" data-f="pov.whyChange" placeholder="Cost of doing nothing? Pain today?">${esc(p.whyChange)}</textarea>
+  </div>
+  <div class="pov-card">
+    <div class="pov-q">Why now?</div>
+    <textarea class="field-input" rows="3" data-f="pov.whyNow" placeholder="Trigger event, renewal window, exec pressure?">${esc(p.whyNow)}</textarea>
+  </div>
+  <div class="pov-card">
+    <div class="pov-q">Why Eleven?</div>
+    <textarea class="field-input" rows="3" data-f="pov.whyUs" placeholder="Unique angle for this account specifically?">${esc(p.whyUs)}</textarea>
+  </div>
+  <div class="pov-card">
+    <div class="pov-q">What solution / value?</div>
+    <textarea class="field-input" rows="3" data-f="pov.whatSolution" placeholder="Which modules? Quantified ROI?">${esc(p.whatSolution)}</textarea>
+  </div>
+</div>
+<div class="sec-div">12-month objectives</div>
+<table class="obj-table">
+  <thead><tr>
+    <th style="width:80px">Owner</th>
+    <th>Objective</th>
+    <th style="width:120px">Target <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;opacity:0.7">Q# YYYY</span></th>
+  </tr></thead>
+  <tbody>
+    <tr><td>AE</td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.objective1" value="${esc(p.objective1)}" placeholder="e.g. Signed onboarding agreement"></td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.obj1date" value="${esc(p.obj1date)}" placeholder="Q2 2025"></td>
+    </tr>
+    <tr><td>AE</td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.objective2" value="${esc(p.objective2)}" placeholder="e.g. Principal demo completed"></td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.obj2date" value="${esc(p.obj2date)}" placeholder="Q3 2025"></td>
+    </tr>
+    <tr><td>AE/CSM</td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.objective3" value="${esc(p.objective3)}" placeholder="e.g. First data integration live"></td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.obj3date" value="${esc(p.obj3date)}" placeholder="Q4 2025"></td>
+    </tr>
+  </tbody>
+</table>`;
+}
+
+function buildOpportunity() {
+  const o = d().opportunity;
+  const { yes, total } = calcScore();
+  const fc = calcForecast();
+  const blockerWeak = MEDD.filter(s => s.blocker && meddStatus(s.id, s.questions.length) === 'low').length;
+  return `<div class="slide-label">Section 4</div>
+<div class="slide-title">Opportunity & MEDDPICC</div>
+<div class="sec-div first">Whitespace & expansion</div>
+<div class="field-full">
+  <div class="field-label">Where is the opportunity?</div>
+  <textarea class="field-input" rows="2" data-f="opportunity.whitespace" placeholder="e.g. Core platform + reporting module; expansion to 2nd entity in Y2">${esc(o.whitespace)}</textarea>
+</div>
+<div class="sec-div">Competitive landscape</div>
+<div class="field-grid">
+  <div>
+    <div class="field-label">Real competition (name it)</div>
+    <textarea class="field-input" rows="2" data-f="opportunity.incumbents" placeholder="e.g. Addepar + Excel; internal ops team">${esc(o.incumbents)}</textarea>
+  </div>
+  <div>
+    <div class="field-label">Our strategy</div>
+    <div class="chip-group" style="margin-top:4px">
+      ${['Direct', 'Flank', 'Divide & conquer', 'Defend'].map(v => `<button class="chip${o.competitiveStrategy === v ? ' sel-blue' : ''}" onclick="setDeep('opportunity.competitiveStrategy','${v}');render()">${v}</button>`).join('')}
+    </div>
+    <textarea class="field-input" rows="2" style="margin-top:8px" data-f="opportunity.competitive" placeholder="How do we win?">${esc(o.competitive)}</textarea>
+  </div>
+</div>
+<div class="sec-div">MEDDPICC qualifier</div>
+<div class="medd-score-bar">
+  <div class="medd-score-card"><div class="lbl">Score</div><div class="val">${yes}/${total}</div></div>
+  <div class="medd-score-card"><div class="lbl">Sections green</div><div class="val">${MEDD.filter(s => meddStatus(s.id, s.questions.length) === 'full').length}/7</div></div>
+  <div class="medd-score-card"><div class="lbl">Blockers weak</div><div class="val" style="color:${blockerWeak > 0 ? 'var(--text-danger)' : 'var(--text-success)'}">${blockerWeak > 0 ? blockerWeak + ' weak' : 'Clear'}</div></div>
+  <div class="medd-score-card"><div class="lbl">Forecast</div><div class="val" style="font-size:14px;padding-top:3px"><span class="forecast-badge ${FC_CLASS[fc]}">${fc}</span></div></div>
+</div>
+${MEDD.map(s => buildMeddSection(s)).join('')}
+<div class="sec-div">Opportunity gaps & actions to close</div>
+<div style="font-size:11px;color:var(--text-tertiary);margin-bottom:8px">Blocker sections below 50% surface automatically.</div>
+${buildGapsTable()}
+<button class="gaps-add-btn" onclick="addGapRow()">+ Add gap manually</button>`;
+}
+
+function buildMeddSection(s) {
+  const isOpen = acct().openMedd.has(s.id);
+  const a = d().opportunity.meddAnswers;
+  const notes = d().opportunity.meddNotes;
+  const yes = meddYes(s.id, s.questions.length);
+  const total = s.questions.length;
+  const status = meddStatus(s.id, total);
+  const pips = Array.from({ length: total }, (_, i) => `<span class="pip ${i < yes ? (status === 'full' ? 'filled' : 'partial') : ''}"></span>`).join('');
+  let body = '';
+  if (isOpen) {
+    body = '<div class="medd-body">';
+    s.questions.forEach((q, i) => {
+      const key = s.id + '_' + i;
+      const val = a[key] || '';
+      body += `<div class="medd-question">
+  <div><div class="q-text">${q.text}</div><div class="q-tag">${q.tag}</div></div>
+  <div class="tog-group">
+    <button class="tog ${val === 'yes' ? 'yes' : ''}" onclick="setMeddAnswer('${s.id}',${i},'yes')">Yes</button>
+    <button class="tog ${val === 'no' ? 'no' : ''}" onclick="setMeddAnswer('${s.id}',${i},'no')">No</button>
+  </div>
+</div>`;
+    });
+    body += `<div class="medd-notes"><textarea rows="2" placeholder="Notes for ${s.title.toLowerCase()}…" onchange="setMeddNote('${s.id}',this.value)">${esc(notes[s.id] || '')}</textarea></div>`;
+    body += '</div>';
+  }
+  return `<div class="medd-section">
+  <div class="medd-section-header" onclick="toggleMedd('${s.id}')">
+    <div class="medd-left">
+      <div class="medd-icon"><svg viewBox="0 0 24 24">${s.icon}</svg></div>
+      <div>
+        <div class="medd-title-row">
+          <span class="medd-title">${s.title}</span>
+          ${s.blocker ? '<span class="blocker-tag">blocker</span>' : ''}
+        </div>
+        <div class="pip-row">${pips}</div>
+        <div class="medd-desc">${s.desc}</div>
+      </div>
+    </div>
+    <svg class="chevron ${isOpen ? 'open' : ''}" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  ${body}
+</div>`;
+}
+
+function buildGapsTable() {
+  const ma = d().opportunity.meddAnswers;
+  const ov = d().opportunity.gapOverrides || {};
+  const manual = (ov.__manual || []);
+  const autoRows = MEDD.filter(s => s.blocker && meddYes(s.id, s.questions.length) < Math.ceil(s.questions.length / 2));
+  if (autoRows.length === 0 && manual.length === 0) {
+    return `<div class="gaps-empty"><span class="gaps-empty-dot"></span>No weak blocker sections — all critical areas at 50%+ confirmed.</div>`;
+  }
+  let html = `<table class="gaps-table"><thead><tr>
+    <th style="width:110px">Section</th><th>Gap</th><th>Action to close</th>
+    <th style="width:66px">Owner</th><th style="width:60px">By</th><th style="width:20px"></th>
+  </tr></thead><tbody>`;
+  autoRows.forEach(s => {
+    html += `<tr>
+  <td><span class="gap-badge gap-blocker">${s.title}</span></td>
+  <td><input data-gap="${s.id}_gap" value="${esc(ov[s.id + '_gap'] || '')}" placeholder="What's missing?"></td>
+  <td><input data-gap="${s.id}_action" value="${esc(ov[s.id + '_action'] || '')}" placeholder="Next step to resolve"></td>
+  <td><input data-gap="${s.id}_owner" value="${esc(ov[s.id + '_owner'] || '')}" placeholder="Tim/Beth"></td>
+  <td><input data-gap="${s.id}_by" value="${esc(ov[s.id + '_by'] || '')}" placeholder="Jun 1"></td>
+  <td></td>
+</tr>`;
+  });
+  manual.forEach((r, i) => {
+    html += `<tr>
+  <td><span class="gap-badge gap-custom">${esc(r.section || 'Custom')}</span></td>
+  <td><input data-mgap="${i}_gap" value="${esc(r.gap || '')}" placeholder="What's missing?"></td>
+  <td><input data-mgap="${i}_action" value="${esc(r.action || '')}" placeholder="Next step to resolve"></td>
+  <td><input data-mgap="${i}_owner" value="${esc(r.owner || '')}" placeholder="Tim/Beth"></td>
+  <td><input data-mgap="${i}_by" value="${esc(r.by || '')}" placeholder="Jun 1"></td>
+  <td><button class="gap-rm" onclick="removeGapRow(${i})">×</button></td>
+</tr>`;
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+function buildMap() {
+  const m = d().map;
+  const rows = (m.rows || []).map((r, i) => `<tr>
+  <td><input data-map="${i}.date" value="${esc(r.date)}" placeholder="Jun 15"></td>
+  <td><select data-map="${i}.owner">${['Eleven', 'Account', 'Both'].map(v => `<option ${r.owner === v ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
+  <td><input data-map="${i}.action" value="${esc(r.action)}" placeholder="Action or milestone"></td>
+  <td><select data-map="${i}.status">${['Open', 'In progress', 'Done', 'Blocked'].map(v => `<option ${r.status === v ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
+</tr>`).join('');
+  return `<div class="slide-label">Section 5</div>
+<div class="slide-title">Mutual action plan</div>
+<div class="ask-box">
+  <div class="ask-label">🚩 #1 ask — what's needed to advance this deal?</div>
+  <textarea rows="2" data-f="map.topAsk" placeholder="e.g. Principal introduction via Ian to validate data trust requirements…">${esc(m.topAsk)}</textarea>
+</div>
+<div class="sec-div first">Action timeline</div>
+<table class="map-table">
+  <thead><tr>
+    <th style="width:86px">Date</th>
+    <th style="width:80px">Owner</th>
+    <th>Action / milestone</th>
+    <th style="width:96px">Status</th>
+  </tr></thead>
+  <tbody>${rows}</tbody>
+</table>
+<button class="add-row-btn" onclick="addMapRow()">+ Add action</button>
+<div class="sec-div">Engagement cadence</div>
+<div class="field-grid">
+  <div>
+    <div class="field-label">Last meaningful engagement</div>
+    <input class="field-input" data-f="map.lastEngagement" placeholder="e.g. May 14 — discovery call with Beth" value="${esc(m.lastEngagement || '')}">
+  </div>
+  <div>
+    <div class="field-label">Next scheduled touch</div>
+    <input class="field-input" data-f="map.nextTouch" placeholder="e.g. Jun 2 — Austin demo" value="${esc(m.nextTouch || '')}">
+  </div>
+</div>`;
+}
+
+/* ================================================================
+   EVENT LISTENERS
+   ================================================================ */
+
+function attachListeners() {
+  document.querySelectorAll('[data-f]').forEach(el => {
+    el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => {
+      setDeep(el.getAttribute('data-f'), el.value);
+      renderHeaderScore();
+    });
+  });
+  document.querySelectorAll('[data-stk]').forEach(el => {
+    el.addEventListener('input', () => {
+      const [i, field] = el.getAttribute('data-stk').split('.');
+      if (d().stakeholders[+i]) d().stakeholders[+i][field] = el.value;
+    });
+  });
+  document.querySelectorAll('[data-map]').forEach(el => {
+    el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => {
+      const [i, field] = el.getAttribute('data-map').split('.');
+      if (!d().map.rows[+i]) d().map.rows[+i] = {};
+      d().map.rows[+i][field] = el.value;
+    });
+  });
+  document.querySelectorAll('[data-gap]').forEach(el => {
+    el.addEventListener('input', () => {
+      if (!d().opportunity.gapOverrides) d().opportunity.gapOverrides = { __manual: [] };
+      d().opportunity.gapOverrides[el.getAttribute('data-gap')] = el.value;
+    });
+  });
+  document.querySelectorAll('[data-mgap]').forEach(el => {
+    el.addEventListener('input', () => {
+      const [i, field] = el.getAttribute('data-mgap').split('_');
+      const m = d().opportunity.gapOverrides.__manual;
+      if (m && m[+i]) m[+i][field] = el.value;
+    });
+  });
+}
+
+/* ================================================================
+   DATA HELPERS
+   ================================================================ */
+
+function setDeep(path, val) {
+  const parts = path.split('.');
+  let obj = d();
+  for (let i = 0; i < parts.length - 1; i++) obj = obj[parts[i]];
+  obj[parts[parts.length - 1]] = val;
+}
+function toggleMedd(id) {
+  const s = acct().openMedd;
+  if (s.has(id)) s.delete(id); else s.add(id);
+  renderCurrentSlide();
+  renderHeaderScore();
+}
+function setMeddAnswer(sid, qi, val) {
+  const key = sid + '_' + qi;
+  const a = d().opportunity.meddAnswers;
+  if (a[key] === val) delete a[key]; else a[key] = val;
+  renderCurrentSlide();
+  renderHeaderScore();
+}
+function setMeddNote(sid, val) { d().opportunity.meddNotes[sid] = val; }
+function addStakeholder(role) { d().stakeholders.push({ role, name: '', title: '', sentiment: 'Neutral', win: '' }); render(); }
+function removeStakeholder(i) { d().stakeholders.splice(i, 1); render(); }
+function setStkField(i, f, v) { if (d().stakeholders[i]) d().stakeholders[i][f] = v; }
+function addMapRow() { if (!d().map.rows) d().map.rows = []; d().map.rows.push({ date: '', owner: 'Eleven', action: '', status: 'Open' }); render(); }
+function addGapRow() {
+  if (!d().opportunity.gapOverrides) d().opportunity.gapOverrides = { __manual: [] };
+  if (!d().opportunity.gapOverrides.__manual) d().opportunity.gapOverrides.__manual = [];
+  d().opportunity.gapOverrides.__manual.push({ section: 'Custom', gap: '', action: '', owner: '', by: '' });
+  render();
+}
+function removeGapRow(i) { d().opportunity.gapOverrides.__manual.splice(i, 1); render(); }
+function switchAcct(idx) { currentAcct = idx; render(); }
+function addAcct() {
+  const name = prompt('Account / firm name:');
+  if (!name || !name.trim()) return;
+  accounts.push({ name: name.trim(), currentSlide: 0, openMedd: new Set(['metrics']), data: freshData() });
+  currentAcct = accounts.length - 1;
+  render();
+}
+
+/* ================================================================
+   EXPORT
+   ================================================================ */
+
+function exportPlan() {
+  let out = 'ELEVEN SYSTEMS — ACCOUNT PLAN\nGenerated: ' + new Date().toLocaleDateString() + '\n\n';
+  accounts.forEach(a => {
+    out += '══════════════════════════════\n' + a.name.toUpperCase() + '\n══════════════════════════════\n\n';
+    const s = a.data.snapshot;
+    out += 'SNAPSHOT\nType: ' + (s.firmType || '—') + ' | AUM: ' + (s.aum || '—') + ' | Journey: ' + (s.journey || '—') + ' | Health: ' + (s.healthStatus || '—') + '\n';
+    out += 'ARR: ' + (s.currentArr || '—') + ' → ' + (s.targetArr || '—') + ' | Renewal: ' + (s.renewalQ || '—') + '\n';
+    if (s.notes) out += 'Context: ' + s.notes + '\n';
+    out += '\nSTAKEHOLDERS\n';
+    a.data.stakeholders.forEach(st => out += '  [' + st.role + '] ' + st.name + (st.title ? ' — ' + st.title : '') + ' (' + st.sentiment + ')' + (st.win ? ' | Win: ' + st.win : '') + '\n');
+    if (!a.data.stakeholders.length) out += '  None added\n';
+    const p = a.data.pov;
+    out += '\nPOV\nWhy change: ' + (p.whyChange || '—') + '\nWhy now: ' + (p.whyNow || '—') + '\nWhy Eleven: ' + (p.whyUs || '—') + '\nSolution: ' + (p.whatSolution || '—') + '\n';
+    const o = a.data.opportunity;
+    const ma = o.meddAnswers || {};
+    let yes = 0, total = 0;
+    MEDD.forEach(ms => ms.questions.forEach((_, i) => { total++; if (ma[ms.id + '_' + i] === 'yes') yes++; }));
+    const bl = MEDD.filter(s => s.blocker); let bY = 0, bT = 0;
+    bl.forEach(ms => ms.questions.forEach((_, i) => { bT++; if (ma[ms.id + '_' + i] === 'yes') bY++; }));
+    const p2 = yes / total, bp = bY / bT;
+    let fc = 'Omit';
+    if (bp >= 0.75 && p2 >= 0.70) fc = 'Commit';
+    else if (bp >= 0.55 && p2 >= 0.50) fc = 'Upside';
+    else if (p2 >= 0.25 || yes >= 5) fc = 'Pipeline';
+    out += '\nOPPORTUNITY & MEDDPICC\nScore: ' + yes + '/' + total + ' | Forecast: ' + fc + '\n';
+    out += 'Whitespace: ' + (o.whitespace || '—') + '\nIncumbents: ' + (o.incumbents || '—') + '\nStrategy: ' + (o.competitiveStrategy || '—') + '\n\nMEDDPICC DETAIL\n';
+    MEDD.forEach(ms => {
+      const y = ms.questions.filter((_, i) => ma[ms.id + '_' + i] === 'yes').length;
+      out += '  ' + ms.title + (ms.blocker ? ' [BLOCKER]' : '') + ': ' + y + '/' + ms.questions.length;
+      if (a.data.opportunity.meddNotes && a.data.opportunity.meddNotes[ms.id]) out += ' — ' + a.data.opportunity.meddNotes[ms.id];
+      out += '\n';
+    });
+    out += '\nOPPORTUNITY GAPS\n';
+    const ov = o.gapOverrides || {};
+    MEDD.filter(ms => ms.blocker && ms.questions.filter((_, i) => ma[ms.id + '_' + i] === 'yes').length < Math.ceil(ms.questions.length / 2))
+      .forEach(ms => out += '  [' + ms.title + '] Gap: ' + (ov[ms.id + '_gap'] || '—') + ' | Action: ' + (ov[ms.id + '_action'] || '—') + ' | Owner: ' + (ov[ms.id + '_owner'] || '—') + ' | By: ' + (ov[ms.id + '_by'] || '—') + '\n');
+    ((ov.__manual) || []).forEach(r => out += '  [Custom] Gap: ' + (r.gap || '—') + ' | Action: ' + (r.action || '—') + ' | Owner: ' + (r.owner || '—') + ' | By: ' + (r.by || '—') + '\n');
+    const m = a.data.map;
+    out += '\nMUTUAL ACTION PLAN\n#1 Ask: ' + (m.topAsk || '—') + '\n';
+    (m.rows || []).forEach(r => out += '  ' + r.date + ' | ' + r.owner + ' | ' + r.action + ' | ' + r.status + '\n');
+    if (m.lastEngagement) out += 'Last engagement: ' + m.lastEngagement + '\n';
+    if (m.nextTouch) out += 'Next touch: ' + m.nextTouch + '\n';
+    out += '\n';
+  });
+  const blob = new Blob([out], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'eleven_account_plan_' + new Date().toISOString().slice(0, 10) + '.txt';
+  link.click();
+}
+
+render();
+</script>
+</body>
+</html>
