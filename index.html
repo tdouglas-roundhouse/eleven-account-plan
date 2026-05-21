@@ -1955,8 +1955,61 @@ function dismissFinding(ci, fi) {
   renderCurrentSlide();
 }
 
-render();
-updateLogCount();
+/* ================================================================
+   PERSISTENCE — save full opportunity state to localStorage
+   Runs on every render so nothing is ever lost on reload.
+   ================================================================ */
+
+const STATE_KEY = 'eleven_opp_state';
+
+function saveState() {
+  try {
+    // Sets can't be JSON serialised — convert openMedd to array
+    const serialisable = opps.map(o => ({
+      ...o,
+      openMedd: [...(o.openMedd || [])]
+    }));
+    localStorage.setItem(STATE_KEY, JSON.stringify({
+      opps: serialisable,
+      currentOpp,
+      showDashboard,
+      showPipeline
+    }));
+  } catch(e) { /* localStorage full or unavailable */ }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    if (!raw) { render(); updateLogCount(); return; }
+    const saved = JSON.parse(raw);
+    if (saved.opps && saved.opps.length) {
+      opps = saved.opps.map(o => ({
+        ...o,
+        openMedd: new Set(o.openMedd || ['metrics']),
+        // Ensure freshData fills any fields added since last save
+        data: { ...freshData(), ...o.data,
+          meddpicc: { meddAnswers:{}, meddNotes:{}, gapOverrides:{__manual:[]}, ...(o.data.meddpicc||{}) },
+          accountpov: { ...freshData().accountpov, ...(o.data.accountpov || o.data.pov || {}) },
+          opppov: { ...freshData().opppov, ...(o.data.opppov || {}) },
+          map: { rows:[], topAsk:'', lastEngagement:'', nextTouch:'', ...(o.data.map||{}) },
+          calls: o.data.calls || []
+        }
+      }));
+      currentOpp = Math.min(saved.currentOpp || 0, opps.length - 1);
+      showDashboard = saved.showDashboard !== false;
+      showPipeline  = saved.showPipeline  || false;
+    }
+  } catch(e) { /* corrupted state — start fresh */ }
+  render();
+  updateLogCount();
+}
+
+// Hook saveState into render so every interaction persists
+const _render = render;
+window.render = function() { _render(); saveState(); };
+
+loadState();
 </script>
 </body>
 </html>
