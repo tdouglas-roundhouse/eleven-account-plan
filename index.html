@@ -99,6 +99,7 @@ select.field-input{cursor:pointer}
 .stk-card{background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:10px 12px;position:relative;padding-bottom:28px}
 .role-badge{font-size:10px;font-weight:500;padding:2px 6px;border-radius:4px;margin-bottom:8px;display:inline-block}
 .role-economic-buyer{background:var(--bg-info);color:var(--text-info);border:0.5px solid var(--border-info)}
+.role-executive-sponsor{background:#2d1b69;color:#b794f4;border:0.5px solid #6b46c1}
 .role-champion{background:var(--bg-success);color:var(--text-success);border:0.5px solid var(--border-success)}
 .role-coach{background:var(--bg-warning);color:var(--text-warning);border:0.5px solid var(--border-warning)}
 .role-blocker{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
@@ -521,6 +522,7 @@ const SLIDES = [
   { id: 'meddpicc',     title: 'MEDDPICC'            },
   { id: 'map',          title: 'Mutual Action Plan'  },
   { id: 'calls',        title: 'Call Analysis'       },
+  { id: 'bizasks',      title: 'Business Asks'       },
   { id: 'pipeline',     title: 'Pipeline'            }
 ];
 
@@ -565,6 +567,15 @@ const MEDD = [
       { text: 'Champion has confirmed they can move without a lengthy RFP or procurement cycle', tag: 'cycle speed' }
     ]
   },
+  { id: 'paper_process', title: 'Paper process', desc: 'Will procurement, legal or compliance kill the timeline?', blocker: true,
+    icon: '<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>',
+    questions: [
+      { text: 'Champion has mapped the full paper process — procurement, legal review, and signature authority', tag: 'process mapped' },
+      { text: 'Legal and/or compliance has been engaged or a timeline for engagement has been set', tag: 'legal engaged' },
+      { text: 'Known redlines, data processing agreements, or security reviews have been surfaced and are not disqualifying', tag: 'blockers known' },
+      { text: 'Timeline from verbal agreement to signed contract has been discussed and is realistic', tag: 'sign timeline' }
+    ]
+  },
   { id: 'data_integration', title: 'Data & integration readiness', desc: 'Can they actually onboard? (Most common blocker)', blocker: true,
     icon: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
     questions: [
@@ -601,9 +612,11 @@ function freshData() {
     snapshot:     { firmName: '', firmType: '', aum: '', contactCount: '', healthStatus: '', journey: '', currentArr: '', targetArr: '', renewalQ: '', notes: '', stakeholderGaps: '' },
     stakeholders: [],
     accountpov:   { whyChange: '', whyNow: '', whyUs: '', whatSolution: '', objective1: '', obj1date: '', objective2: '', obj2date: '', objective3: '', obj3date: '' },
-    opppov:       { whitespace: '', incumbents: '', competitiveStrategy: '', competitive: '' },
+    opppov:       { whitespace: '', businessProblem: '', successMetric: '', alternative: '', incumbents: '', competitiveStrategy: '', competitive: '' },
     meddpicc:     { meddAnswers: {}, meddNotes: {}, gapOverrides: { __manual: [] } },
     map:          { rows: [], topAsk: '', lastEngagement: '', nextTouch: '' },
+    accountpovteam: { se: '', execSponsor: '', productOwner: '' },
+    bizasks:      { rows: [] },
     calls:        []
   };
 }
@@ -794,6 +807,7 @@ function isSlideFilled(id) {
   if (id === 'meddpicc')     return calcScore().yes > 0;
   if (id === 'map')          return d().map.rows.length > 0 && !!d().map.topAsk;
   if (id === 'calls')        return (d().calls || []).length > 0;
+  if (id === 'bizasks')      return (d().bizasks && d().bizasks.rows && d().bizasks.rows.length > 0);
   return false;
 }
 
@@ -1074,11 +1088,13 @@ function buildSlide(id) {
   if (id === 'meddpicc')     return buildMeddpiccSlide();
   if (id === 'map')          return buildMap();
   if (id === 'calls')        return buildCalls();
+  if (id === 'bizasks')      return buildBizAsks();
   return '';
 }
 
 function buildAccountPov() {
   const p = d().accountpov || {};
+  const t = d().accountpovteam || {};
   return `<div class="slide-title">Account POV</div>
 <div class="pov-grid">
   <div class="pov-card"><div class="pov-q">Why change?</div>
@@ -1110,16 +1126,44 @@ function buildAccountPov() {
       <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="accountpov.obj3date" value="${esc(p.obj3date)}" placeholder="Q4 2025"></td>
     </tr>
   </tbody>
-</table>`;
+</table>
+<div class="sec-div">Eleven team coverage</div>
+<div class="field-grid-3">
+  <div>
+    <div class="field-label">SE / SC</div>
+    <input class="field-input" data-f="accountpovteam.se" placeholder="Solutions engineer name" value="${esc(t.se || '')}">
+  </div>
+  <div>
+    <div class="field-label">Executive Sponsor</div>
+    <input class="field-input" data-f="accountpovteam.execSponsor" placeholder="Eleven exec sponsoring this deal" value="${esc(t.execSponsor || '')}">
+  </div>
+  <div>
+    <div class="field-label">Product Owner</div>
+    <input class="field-input" data-f="accountpovteam.productOwner" placeholder="Product DRI for roadmap asks" value="${esc(t.productOwner || '')}">
+  </div>
+</div>`;
 }
 
 function buildOppPov() {
   const o = d().opppov || {};
   return `<div class="slide-title">Opportunity POV</div>
-<div class="sec-div first">Whitespace & expansion</div>
+<div class="sec-div first">The five questions</div>
 <div class="field-full">
-  <div class="field-label">Where is the opportunity? What modules, services, or expansions?</div>
-  <textarea class="field-input" rows="3" data-f="opppov.whitespace" placeholder="e.g. Core platform + reporting module; expansion to 2nd entity in Y2">${esc(o.whitespace)}</textarea>
+  <div class="field-label">1. What business problem does this solve? <span class="fmt-hint">Operational / financial pain — not technical features</span></div>
+  <textarea class="field-input" rows="3" data-f="opppov.businessProblem" placeholder="e.g. The principal's team spends 3 days per month reconciling data across 6 systems with no single view of net worth or exposure. This is a control and reputational risk problem, not a reporting problem.">${esc(o.businessProblem)}</textarea>
+</div>
+<div class="field-full">
+  <div class="field-label">2. How is success measured? <span class="fmt-hint">Quantified outcomes the champion can take to the EB</span></div>
+  <textarea class="field-input" rows="3" data-f="opppov.successMetric" placeholder="e.g. Reduce monthly reporting prep from 3 days to 2 hours. Single dashboard the principal reviews weekly without advisor involvement.">${esc(o.successMetric)}</textarea>
+</div>
+<div class="field-full">
+  <div class="field-label">3. What is the alternative? <span class="fmt-hint">"Good enough" is usually the real competitor — what would move the needle enough to act?</span></div>
+  <textarea class="field-input" rows="3" data-f="opppov.alternative" placeholder="e.g. Status quo is Excel + Addepar reports emailed monthly. Champion says it works 'well enough' but the CFO had an embarrassing data discrepancy in front of the principal last quarter. That's the trigger.">${esc(o.alternative)}</textarea>
+</div>
+<div class="sec-div">Opportunity scope</div>
+<div class="field-full">
+  <div class="field-label">Whitespace & expansion</div>
+  <textarea class="field-input" rows="2" data-f="opppov.whitespace" placeholder="e.g. Core platform + reporting module; expansion to 2nd entity in Y2">${esc(o.whitespace)}</textarea>
 </div>
 <div class="sec-div">Competitive landscape</div>
 <div class="field-grid">
@@ -1327,7 +1371,7 @@ function buildStakeholders() {
   }).join('');
   return `<div class="slide-title">Stakeholder Map</div>
 <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-  ${['Economic buyer', 'Champion', 'Coach', 'Blocker', 'Neutral'].map(r => `<button class="action-btn" style="font-size:12px;padding:5px 12px" onclick="addStakeholder('${r}')">+ ${r}</button>`).join('')}
+  ${['Economic buyer', 'Executive Sponsor', 'Champion', 'Coach', 'Blocker', 'Neutral'].map(r => `<button class="action-btn" style="font-size:12px;padding:5px 12px" onclick="addStakeholder('${r}')">+ ${r}</button>`).join('')}
 </div>
 <div class="stk-grid">${cards || '<div style="font-size:13px;color:var(--text-tertiary);padding:10px 0">No stakeholders yet.</div>'}</div>
 <div class="sec-div">Access & coverage gaps</div>
@@ -1341,7 +1385,8 @@ function buildMap() {
   const m = d().map;
   const rows = (m.rows || []).map((r, i) => `<tr>
   <td><input data-map="${i}.date" value="${esc(r.date)}" placeholder="Jun 15"></td>
-  <td><select data-map="${i}.owner">${['Eleven', 'Account', 'Both'].map(v => `<option ${r.owner === v ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
+  <td><input data-map="${i}.ownerEleven" value="${esc(r.ownerEleven || '')}" placeholder="Eleven name"></td>
+  <td><input data-map="${i}.ownerAccount" value="${esc(r.ownerAccount || '')}" placeholder="Account name"></td>
   <td><input data-map="${i}.action" value="${esc(r.action)}" placeholder="Action or milestone"></td>
   <td><select data-map="${i}.status">${['Open', 'In progress', 'Done', 'Blocked'].map(v => `<option ${r.status === v ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
 </tr>`).join('');
@@ -1353,8 +1398,9 @@ function buildMap() {
 <div class="sec-div first">Action timeline</div>
 <table class="map-table">
   <thead><tr>
-    <th style="width:86px">Date</th>
-    <th style="width:80px">Owner</th>
+    <th style="width:80px">Date</th>
+    <th style="width:100px">Eleven owner</th>
+    <th style="width:110px">Account owner</th>
     <th>Action / milestone</th>
     <th style="width:96px">Status</th>
   </tr></thead>
@@ -1372,6 +1418,77 @@ function buildMap() {
     <input class="field-input" data-f="map.nextTouch" placeholder="e.g. Jun 2 — Austin demo" value="${esc(m.nextTouch || '')}">
   </div>
 </div>`;
+}
+
+/* ================================================================
+   BUSINESS ASKS
+   ================================================================ */
+
+function buildBizAsks() {
+  const b = d().bizasks || { rows: [] };
+  const rows = (b.rows || []).map((r, i) => `<tr>
+  <td><input data-biz="${i}.ask" value="${esc(r.ask || '')}" placeholder="What do you need from the business?"></td>
+  <td>
+    <select data-biz="${i}.team" style="width:100%;font-size:12px;font-family:var(--font);color:var(--text-primary);background:transparent;border:none;outline:none;cursor:pointer">
+      ${['Product', 'Legal', 'Executive', 'Marketing', 'Finance', 'Engineering', 'Other'].map(v => `<option ${r.team === v ? 'selected' : ''}>${v}</option>`).join('')}
+    </select>
+  </td>
+  <td>
+    <select data-biz="${i}.priority" style="width:100%;font-size:12px;font-family:var(--font);color:var(--text-primary);background:transparent;border:none;outline:none;cursor:pointer">
+      ${['High', 'Medium', 'Low'].map(v => `<option ${r.priority === v ? 'selected' : ''}>${v}</option>`).join('')}
+    </select>
+  </td>
+  <td><input data-biz="${i}.by" value="${esc(r.by || '')}" placeholder="Date needed"></td>
+  <td>
+    <select data-biz="${i}.status" style="width:100%;font-size:12px;font-family:var(--font);color:var(--text-primary);background:transparent;border:none;outline:none;cursor:pointer">
+      ${['Open', 'In progress', 'Done', 'Blocked'].map(v => `<option ${r.status === v ? 'selected' : ''}>${v}</option>`).join('')}
+    </select>
+  </td>
+  <td><button class="gap-rm" onclick="removeBizAsk(${i})">×</button></td>
+</tr>`).join('');
+
+  const emptyState = b.rows.length === 0
+    ? `<div style="font-size:13px;color:var(--text-tertiary);padding:16px 0;text-align:center">No asks yet. Add what the business needs to deliver to move this deal.</div>`
+    : '';
+
+  return `<div class="slide-title">Business Asks</div>
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6">What does the account team need from <strong>Eleven internally</strong> to move this deal forward? Product roadmap commitments, legal escalation, executive calls, EBC scheduling, custom demo environments, pricing approvals.</div>
+<table class="map-table" style="width:100%">
+  <thead><tr>
+    <th>Ask</th>
+    <th style="width:100px">Team</th>
+    <th style="width:80px">Priority</th>
+    <th style="width:90px">Needed by</th>
+    <th style="width:96px">Status</th>
+    <th style="width:24px"></th>
+  </tr></thead>
+  <tbody>${rows}</tbody>
+</table>
+${emptyState}
+<button class="add-row-btn" onclick="addBizAsk()">+ Add ask</button>
+<div class="sec-div" style="margin-top:8px">Examples</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+  ${[
+    ['Product', 'Confirm Addepar integration on roadmap for Q3'],
+    ['Executive', 'Austin intro call with Strauss principal — trust signal'],
+    ['Legal', 'MSA redline review — client has non-standard DPA clause'],
+    ['Marketing', 'Reference customer in family office space for validation call']
+  ].map(([team, text]) => `<div style="background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);padding:8px 10px">
+    <div style="font-size:10px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px">${team}</div>
+    <div style="font-size:12px;color:var(--text-secondary)">${text}</div>
+  </div>`).join('')}
+</div>`;
+}
+
+function addBizAsk() {
+  if (!d().bizasks) d().bizasks = { rows: [] };
+  d().bizasks.rows.push({ ask: '', team: 'Product', priority: 'High', by: '', status: 'Open' });
+  render();
+}
+
+function removeBizAsk(i) {
+  d().bizasks.rows.splice(i, 1);
+  render();
 }
 
 /* ================================================================
@@ -1396,6 +1513,14 @@ function attachListeners() {
       const [i, field] = el.getAttribute('data-map').split('.');
       if (!d().map.rows[+i]) d().map.rows[+i] = {};
       d().map.rows[+i][field] = el.value;
+    });
+  });
+  document.querySelectorAll('[data-biz]').forEach(el => {
+    el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => {
+      const [i, field] = el.getAttribute('data-biz').split('.');
+      if (!d().bizasks) d().bizasks = { rows: [] };
+      if (!d().bizasks.rows[+i]) d().bizasks.rows[+i] = {};
+      d().bizasks.rows[+i][field] = el.value;
     });
   });
   document.querySelectorAll('[data-gap]').forEach(el => {
@@ -1440,7 +1565,7 @@ function setMeddNote(sid, val) { d().meddpicc.meddNotes[sid] = val; }
 function addStakeholder(role) { d().stakeholders.push({ role, name: '', title: '', sentiment: 'Neutral', win: '' }); render(); }
 function removeStakeholder(i) { d().stakeholders.splice(i, 1); render(); }
 function setStkField(i, f, v) { if (d().stakeholders[i]) d().stakeholders[i][f] = v; }
-function addMapRow() { if (!d().map.rows) d().map.rows = []; d().map.rows.push({ date: '', owner: 'Eleven', action: '', status: 'Open' }); render(); }
+function addMapRow() { if (!d().map.rows) d().map.rows = []; d().map.rows.push({ date: '', ownerEleven: '', ownerAccount: '', action: '', status: 'Open' }); render(); }
 function addGapRow() {
   if (!d().meddpicc.gapOverrides) d().meddpicc.gapOverrides = { __manual: [] };
   if (!d().meddpicc.gapOverrides.__manual) d().meddpicc.gapOverrides.__manual = [];
@@ -2114,8 +2239,10 @@ function loadState() {
         data: { ...freshData(), ...o.data,
           meddpicc: { meddAnswers:{}, meddNotes:{}, gapOverrides:{__manual:[]}, ...(o.data.meddpicc||{}) },
           accountpov: { ...freshData().accountpov, ...(o.data.accountpov || o.data.pov || {}) },
+          accountpovteam: { se:"", execSponsor:"", productOwner:"", ...(o.data.accountpovteam||{}) },
           opppov: { ...freshData().opppov, ...(o.data.opppov || {}) },
           map: { rows:[], topAsk:'', lastEngagement:'', nextTouch:'', ...(o.data.map||{}) },
+          bizasks: { rows:[], ...(o.data.bizasks||{}) },
           calls: o.data.calls || []
         }
       }));
