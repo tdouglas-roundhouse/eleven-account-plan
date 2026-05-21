@@ -385,38 +385,7 @@ select.field-input{cursor:pointer}
       <div class="bottom-bar">
         <button class="action-btn" onclick="saveToLog()">Save to log</button>
         <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
-        <div style="margin-left:auto">
-          <button class="log-open-btn" onclick="openLog()">
-            Pipeline log <span class="log-count" id="logCount">0</span>
-          </button>
-        </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- Log overlay -->
-<div class="log-overlay" id="logOverlay" onclick="closeLogOnBg(event)">
-  <div class="log-panel">
-    <div class="log-header">
-      <h2>Opportunity Log</h2>
-      <button class="log-close" onclick="closeLog()">Close</button>
-    </div>
-    <div class="log-summary" id="logSummary"></div>
-    <div class="log-body">
-      <table class="log-table">
-        <thead><tr>
-          <th style="width:180px">Opportunity</th>
-          <th style="width:90px">Type</th>
-          <th style="width:110px">ARR</th>
-          <th style="width:80px">MEDDPICC</th>
-          <th>Forecast</th>
-          <th style="width:120px">Next touch</th>
-          <th style="width:90px">Saved</th>
-        </tr></thead>
-        <tbody id="logTableBody"></tbody>
-      </table>
-      <div class="log-empty" id="logEmpty" style="display:none">No saved opportunities yet. Hit "Save to log" on any plan.</div>
     </div>
   </div>
 </div>
@@ -515,11 +484,13 @@ const SLIDES = [
   { id: 'opppov',       title: 'Opportunity POV'     },
   { id: 'meddpicc',     title: 'MEDDPICC'            },
   { id: 'map',          title: 'Mutual Action Plan'  },
-  { id: 'calls',        title: 'Call Analysis'       }
+  { id: 'calls',        title: 'Call Analysis'       },
+  { id: 'pipeline',     title: 'Pipeline'            }
 ];
 
-// Dashboard is global — not per-opportunity
+// View state
 let showDashboard = true;
+let showPipeline = false;
 
 const MEDD = [
   { id: 'metrics', title: 'Metrics', desc: 'Does the champion quantify the pain?', blocker: false,
@@ -699,14 +670,18 @@ function renderSidebar() {
   const nav = document.getElementById('sidebarNav');
   if (!nav) return;
   nav.innerHTML = '';
+
+  // Dashboard — top, styled as section header
   const dashBtn = document.createElement('button');
-  dashBtn.className = 'nav-pill' + (showDashboard ? ' active' : '');
+  dashBtn.className = 'nav-pill' + (showDashboard && !showPipeline ? ' active' : '');
   dashBtn.style.cssText = 'border-bottom:0.5px solid rgba(255,255,255,0.08);border-radius:0;padding-bottom:12px;margin-bottom:4px;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600';
   dashBtn.textContent = 'Dashboard';
-  dashBtn.onclick = () => { showDashboard = true; render(); };
+  dashBtn.onclick = () => { showDashboard = true; showPipeline = false; render(); };
   nav.appendChild(dashBtn);
-  if (!showDashboard) {
-    SLIDES.filter(s => s.id !== 'dashboard').forEach((s, i) => {
+
+  // Opportunity sections — only when in an opp
+  if (!showDashboard && !showPipeline) {
+    SLIDES.filter(s => s.id !== 'dashboard' && s.id !== 'pipeline').forEach((s, i) => {
       const actualIdx = i + 1;
       const btn = document.createElement('button');
       const filled = isSlideFilled(s.id);
@@ -717,6 +692,8 @@ function renderSidebar() {
       nav.appendChild(btn);
     });
   }
+
+  // Pipeline — pinned at bottom with divider
   const sidebar = document.querySelector('.sidebar');
   let healthEl = document.getElementById('sidebarHealth');
   if (!healthEl) {
@@ -725,6 +702,31 @@ function renderSidebar() {
     div.className = 'sidebar-health';
     sidebar.appendChild(div);
   }
+  if (!showDashboard && !showPipeline) {
+    const hs = calcHealthScore();
+    const hsColor = hs >= 70 ? '#5DCAA5' : hs >= 40 ? '#EF9F27' : '#f09595';
+    document.getElementById('sidebarHealth').innerHTML = `
+      <div><div class="sidebar-health-label">Deal health</div></div>
+      <div class="sidebar-health-score" style="color:${hsColor}">${hs}</div>
+      ${healthRingSVG(hs, 28, 3)}`;
+  } else {
+    document.getElementById('sidebarHealth').innerHTML = '';
+  }
+
+  // Pipeline nav pill — always at very bottom of sidebar
+  let pipelineBtn = document.getElementById('pipelineNavBtn');
+  if (!pipelineBtn) {
+    pipelineBtn = document.createElement('button');
+    pipelineBtn.id = 'pipelineNavBtn';
+    pipelineBtn.className = 'nav-pill';
+    pipelineBtn.style.cssText = 'margin-top:auto;border-top:0.5px solid rgba(255,255,255,0.08);border-radius:0;padding-top:12px';
+    sidebar.appendChild(pipelineBtn);
+  }
+  pipelineBtn.className = 'nav-pill' + (showPipeline ? ' active' : '');
+  pipelineBtn.style.cssText = 'border-top:0.5px solid rgba(255,255,255,0.08);border-radius:0;padding-top:12px;margin-top:auto';
+  const logCount = getLog().length;
+  pipelineBtn.innerHTML = `Pipeline <span style="font-size:10px;font-weight:600;background:${showPipeline ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.12)'};color:rgba(255,255,255,0.8);border-radius:10px;padding:1px 7px;margin-left:4px">${logCount}</span>`;
+  pipelineBtn.onclick = () => { showPipeline = true; showDashboard = false; render(); };
 }
 
 function isSlideFilled(id) {
@@ -741,6 +743,13 @@ function isSlideFilled(id) {
 function renderCurrentSlide() {
   const c = document.getElementById('slidesContainer');
   c.innerHTML = '';
+  if (showPipeline) {
+    const slide = document.createElement('div');
+    slide.className = 'slide visible';
+    slide.innerHTML = buildPipelinePage();
+    c.appendChild(slide);
+    return;
+  }
   if (showDashboard) {
     const slide = document.createElement('div');
     slide.className = 'slide visible dashboard';
@@ -1580,86 +1589,91 @@ function saveToLog() {
 }
 
 function updateLogCount() {
-  const el = document.getElementById('logCount');
-  if (el) el.textContent = getLog().length;
+  // Count badge now lives in the sidebar nav pill — re-render sidebar
+  renderSidebar();
 }
 
-function openLog() {
-  renderLog();
-  document.getElementById('logOverlay').classList.add('open');
-}
+/* ================================================================
+   PIPELINE PAGE — full inline page replacing the modal overlay
+   ================================================================ */
 
-function closeLog() {
-  document.getElementById('logOverlay').classList.remove('open');
-}
-
-function closeLogOnBg(e) {
-  if (e.target === document.getElementById('logOverlay')) closeLog();
-}
-
-function renderLog() {
+function buildPipelinePage() {
   const log = getLog();
-  // Summary bar
-  const summary = document.getElementById('logSummary');
-  const totalARR = log.reduce((sum, e) => {
-    const n = parseFloat((e.targetArr || '').replace(/[^0-9.]/g, ''));
-    const mult = /T$/i.test(e.targetArr) ? 1e12 : /B$/i.test(e.targetArr) ? 1e9 : /M$/i.test(e.targetArr) ? 1e6 : /K$/i.test(e.targetArr) ? 1e3 : 1;
-    return sum + (isNaN(n) ? 0 : n * mult);
-  }, 0);
-  const commits = log.filter(e => e.forecast === 'Commit').length;
-  const upsides = log.filter(e => e.forecast === 'Upside').length;
-  const pipes   = log.filter(e => e.forecast === 'Pipeline').length;
-  function fmtARR(n) {
-    if (n >= 1e9) return '$' + (n/1e9).toFixed(1) + 'B';
-    if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
-    if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
-    return n > 0 ? '$' + n : '—';
-  }
-  summary.innerHTML = `
-    <div class="log-stat"><div class="ls-val">${log.length}</div><div class="ls-lbl">Opportunities</div></div>
-    <div class="log-stat"><div class="ls-val">${fmtARR(totalARR)}</div><div class="ls-lbl">Target ARR</div></div>
-    <div class="log-stat"><div class="ls-val" style="color:var(--text-success)">${commits}</div><div class="ls-lbl">Commit</div></div>
-    <div class="log-stat"><div class="ls-val" style="color:var(--text-info)">${upsides} <span style="font-size:13px;color:var(--text-tertiary)">/ ${pipes}</span></div><div class="ls-lbl">Upside / Pipeline</div></div>
-  `;
-  // Table rows
-  const tbody = document.getElementById('logTableBody');
-  const empty = document.getElementById('logEmpty');
+
+  // Summary stats
+  const totalARR = log.reduce((sum, e) => sum + parseARR(e.targetArr), 0);
+  const commits  = log.filter(e => e.forecast === 'Commit').length;
+  const upsides  = log.filter(e => e.forecast === 'Upside').length;
+  const pipes    = log.filter(e => e.forecast === 'Pipeline').length;
+  const omits    = log.filter(e => e.forecast === 'Omit').length;
+
+  const summaryHTML = `
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">
+  <div class="medd-score-card"><div class="lbl">Opportunities</div><div class="val">${log.length}</div></div>
+  <div class="medd-score-card"><div class="lbl">Target ARR</div><div class="val" style="font-size:18px">${fmtARR(totalARR)}</div></div>
+  <div class="medd-score-card"><div class="lbl">Commit / Upside</div><div class="val"><span style="color:var(--text-success)">${commits}</span> <span style="font-size:14px;color:var(--text-tertiary)">/ ${upsides}</span></div></div>
+  <div class="medd-score-card"><div class="lbl">Pipeline / Omit</div><div class="val"><span style="color:var(--text-warning)">${pipes}</span> <span style="font-size:14px;color:var(--text-tertiary)">/ ${omits}</span></div></div>
+</div>`;
+
   if (log.length === 0) {
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    return;
+    return `<div class="slide-title">Pipeline</div>
+${summaryHTML}
+<div style="text-align:center;padding:40px 0;color:var(--text-tertiary);font-size:13px">
+  No saved opportunities yet. Open any opportunity plan and hit <strong>Save to log</strong>.
+</div>`;
   }
-  empty.style.display = 'none';
-  const FC_CLASS = { Commit: 'fc-commit', Upside: 'fc-upside', Pipeline: 'fc-pipeline', Omit: 'fc-omit' };
-  tbody.innerHTML = log.map((e, i) => {
+
+  const rows = log.map(e => {
     const pct = Math.round((e.meddScore / e.meddTotal) * 100);
-    const saved = new Date(e.savedAt);
-    const savedStr = saved.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    return `<tr onclick="jumpToOpp('${e.id}')">
+    const saved = new Date(e.savedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const fcClass = { Commit: 'fc-commit', Upside: 'fc-upside', Pipeline: 'fc-pipeline', Omit: 'fc-omit' }[e.forecast] || 'fc-omit';
+    return `<tr onclick="jumpToOpp('${e.id}')" style="cursor:pointer">
   <td>
     <div class="log-name">${esc(e.name)}</div>
-    <div class="log-sub">${esc(e.aum || '—')} ${e.journey ? '· ' + e.journey : ''}</div>
+    <div class="log-sub">${esc(e.aum || '—')}${e.journey ? ' · ' + esc(e.journey) : ''}</div>
   </td>
   <td><span style="font-size:12px;color:var(--text-secondary)">${esc(e.firmType || '—')}</span></td>
   <td>
     <div class="log-arr">${esc(e.currentArr || '—')}</div>
-    <div class="log-arr-target">&#8594; ${esc(e.targetArr || '—')}</div>
+    <div class="log-arr-target">→ ${esc(e.targetArr || '—')}</div>
   </td>
   <td>
     <div class="log-medd">${e.meddScore}/${e.meddTotal}</div>
     <div class="log-medd-bar"><div class="log-medd-fill" style="width:${pct}%"></div></div>
   </td>
-  <td><span class="forecast-badge ${FC_CLASS[e.forecast] || 'fc-omit'}" style="font-size:11px;padding:2px 9px">${e.forecast}</span></td>
+  <td><span class="forecast-badge ${fcClass}" style="font-size:11px;padding:2px 9px">${e.forecast}</span></td>
   <td><span class="log-next">${esc(e.nextTouch || '—')}</span></td>
-  <td><span class="log-updated">${savedStr}</span></td>
+  <td><span class="log-updated">${saved}</span></td>
 </tr>`;
   }).join('');
+
+  return `<div class="slide-title">Pipeline</div>
+${summaryHTML}
+<table class="log-table" style="width:100%">
+  <thead><tr>
+    <th style="width:190px">Opportunity</th>
+    <th style="width:110px">Type</th>
+    <th style="width:110px">ARR</th>
+    <th style="width:90px">MEDDPICC</th>
+    <th>Forecast</th>
+    <th style="width:130px">Next touch</th>
+    <th style="width:80px">Saved</th>
+  </tr></thead>
+  <tbody>${rows}</tbody>
+</table>`;
 }
 
 function jumpToOpp(id) {
   const idx = opps.findIndex(o => o.id === id);
-  if (idx >= 0) { currentOpp = idx; closeLog(); render(); }
-  else { alert('This opportunity is in the log but not in the current session. Reload the plan and re-save to sync.'); }
+  if (idx >= 0) {
+    showPipeline = false;
+    showDashboard = false;
+    currentOpp = idx;
+    opps[idx].currentSlide = 1;
+    render();
+  } else {
+    alert('This opportunity is in the log but not open in this session. Re-open and save it to re-link.');
+  }
 }
 
 /* ================================================================
