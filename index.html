@@ -211,6 +211,63 @@ select.field-input{cursor:pointer}
   .log-overlay{padding:0}
   .log-panel{max-height:100vh;border-radius:0}
 }
+
+/* ── Dashboard ── */
+.dashboard{padding:0}
+.dash-header{margin-bottom:24px}
+.dash-title{font-size:22px;font-weight:600;letter-spacing:-0.02em;color:var(--text-primary)}
+.dash-subtitle{font-size:13px;color:var(--text-tertiary);margin-top:3px}
+.waterfall{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:20px 22px;margin-bottom:16px}
+.waterfall-title{font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:16px}
+.waterfall-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.wf-bar{display:flex;flex-direction:column;gap:6px}
+.wf-bar-label{font-size:11px;color:var(--text-tertiary);font-weight:500}
+.wf-bar-track{height:8px;border-radius:4px;background:var(--border-light);overflow:hidden;margin-bottom:2px}
+.wf-bar-fill{height:100%;border-radius:4px;transition:width 0.7s cubic-bezier(.4,0,.2,1)}
+.wf-fill-commit{background:#1D9E75}
+.wf-fill-upside{background:#185fa5}
+.wf-fill-pipeline{background:#EF9F27}
+.wf-fill-omit{background:var(--border-mid)}
+.wf-bar-arr{font-size:20px;font-weight:600;letter-spacing:-0.02em;color:var(--text-primary);line-height:1;margin-top:4px}
+.wf-bar-count{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+.waterfall-total{display:flex;align-items:baseline;gap:10px;padding-top:14px;border-top:0.5px solid var(--border-light)}
+.wf-total-label{font-size:11px;color:var(--text-tertiary);font-weight:500;text-transform:uppercase;letter-spacing:0.06em}
+.wf-total-arr{font-size:26px;font-weight:600;letter-spacing:-0.02em;color:var(--text-primary)}
+.wf-total-sub{font-size:12px;color:var(--text-tertiary)}
+.opp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-bottom:20px}
+.opp-card{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:16px 18px;cursor:pointer;transition:all 0.15s;position:relative}
+.opp-card:hover{border-color:var(--border-mid);box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+.opp-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}
+.opp-card-name{font-size:14px;font-weight:600;color:var(--text-primary);letter-spacing:-0.01em;line-height:1.3}
+.opp-card-type{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+.health-ring{width:48px;height:48px;flex-shrink:0}
+.opp-card-mid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.opp-card-stat .stat-label{font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px}
+.opp-card-stat .stat-val{font-size:15px;font-weight:600;color:var(--text-primary);letter-spacing:-0.01em;line-height:1.2}
+.opp-card-stat .stat-sub{font-size:11px;color:var(--text-tertiary)}
+.opp-card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:0.5px solid var(--border-light)}
+.medd-prog{flex:1;margin-right:12px}
+.medd-prog-label{font-size:10px;color:var(--text-tertiary);margin-bottom:4px;display:flex;justify-content:space-between}
+.medd-prog-track{height:4px;border-radius:2px;background:var(--border-light);overflow:hidden}
+.medd-prog-fill{height:100%;border-radius:2px;background:var(--green-pip);transition:width 0.5s}
+.opp-card-add{background:var(--bg-secondary);border:0.5px dashed var(--border-mid);border-radius:var(--radius-lg);padding:28px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all 0.15s;min-height:180px}
+.opp-card-add:hover{border-color:var(--border-strong);background:var(--bg-tertiary)}
+.opp-card-add-plus{width:36px;height:36px;border-radius:50%;background:var(--bg-primary);border:0.5px solid var(--border-mid);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--text-tertiary);line-height:1}
+.opp-card-add-label{font-size:13px;color:var(--text-tertiary);font-weight:500}
+.onboarding{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:72vh;text-align:center;padding:40px 24px}
+.onboarding-icon{font-size:52px;margin-bottom:20px}
+.onboarding-title{font-size:26px;font-weight:600;letter-spacing:-0.02em;margin-bottom:10px}
+.onboarding-desc{font-size:14px;color:var(--text-secondary);line-height:1.65;max-width:440px;margin-bottom:28px}
+.onboarding-steps{display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;justify-content:center}
+.onboarding-step{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:14px 16px;width:136px;text-align:left}
+.onboarding-step-num{font-size:10px;font-weight:600;color:var(--green-pip);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:5px}
+.onboarding-step-text{font-size:12px;color:var(--text-secondary);line-height:1.5}
+.onboarding-cta{font-size:14px;font-family:var(--font);padding:12px 28px;border-radius:var(--radius-md);border:none;background:#1a2332;color:#ffffff;cursor:pointer;font-weight:500;transition:opacity 0.15s}
+.onboarding-cta:hover{opacity:0.85}
+.sidebar-health{display:flex;align-items:center;gap:8px;padding:12px 16px 16px;margin-top:auto}
+.sidebar-health-label{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.07em;line-height:1.4}
+.sidebar-health-score{font-size:20px;font-weight:700;margin-left:auto;letter-spacing:-0.02em}
+
 .call-log{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
 .call-entry{background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden}
 .call-entry-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none}
@@ -451,6 +508,7 @@ function attachFormatters() {
    ================================================================ */
 
 const SLIDES = [
+  { id: 'dashboard',    title: 'Dashboard'          },
   { id: 'snapshot',     title: 'Account Snapshot'   },
   { id: 'stakeholders', title: 'Stakeholder Map'     },
   { id: 'accountpov',   title: 'Account POV'         },
@@ -459,6 +517,9 @@ const SLIDES = [
   { id: 'map',          title: 'Mutual Action Plan'  },
   { id: 'calls',        title: 'Call Analysis'       }
 ];
+
+// Dashboard is global — not per-opportunity
+let showDashboard = true;
 
 const MEDD = [
   { id: 'metrics', title: 'Metrics', desc: 'Does the champion quantify the pain?', blocker: false,
@@ -595,11 +656,24 @@ function render() {
 
 function renderHeaderScore() {
   const el = document.getElementById('headerScore');
+  const saveEl = document.getElementById('saveIndicator');
+  if (showDashboard) {
+    el.innerHTML = '';
+    if (saveEl) el.appendChild(saveEl);
+    return;
+  }
   const { yes, total } = calcScore();
   const fc = calcForecast();
-  const saveEl = document.getElementById('saveIndicator');
+  const hs = calcHealthScore();
+  const hsColor = hs >= 70 ? '#5DCAA5' : hs >= 40 ? '#EF9F27' : '#f09595';
   el.innerHTML = `<span class="sc">${yes}/${total}</span><span class="forecast-badge ${FC_CLASS[fc]}">${fc}</span>`;
   if (saveEl) el.appendChild(saveEl);
+  const healthEl = document.getElementById('sidebarHealth');
+  if (healthEl) {
+    healthEl.innerHTML = `<div><div class="sidebar-health-label">Deal health</div></div>
+      <div class="sidebar-health-score" style="color:${hsColor}">${hs}</div>
+      ${healthRingSVG(hs, 28, 3)}`;
+  }
 }
 
 function renderOppBar() {
@@ -607,10 +681,10 @@ function renderOppBar() {
   bar.innerHTML = '';
   opps.forEach((a, i) => {
     const btn = document.createElement('button');
-    btn.className = 'opp-btn' + (i === currentOpp ? ' active' : '');
+    btn.className = 'opp-btn' + (!showDashboard && i === currentOpp ? ' active' : '');
     btn.textContent = a.name;
     btn.title = a.name;
-    btn.onclick = () => switchOpp(i);
+    btn.onclick = () => { showDashboard = false; currentOpp = i; opp().currentSlide = 1; render(); };
     btn.ondblclick = () => { const n = prompt('Rename:', a.name); if (n && n.trim()) { opps[i].name = n.trim(); renderOppBar(); } };
     bar.appendChild(btn);
   });
@@ -625,15 +699,32 @@ function renderSidebar() {
   const nav = document.getElementById('sidebarNav');
   if (!nav) return;
   nav.innerHTML = '';
-  SLIDES.forEach((s, i) => {
-    const btn = document.createElement('button');
-    const filled = isSlideFilled(s.id);
-    const isActive = i === opp().currentSlide;
-    btn.className = 'nav-pill' + (isActive ? ' active' : '');
-    btn.innerHTML = s.title + `<span class="nav-pip${filled ? ' filled' : ''}"></span>`;
-    btn.onclick = () => { opp().currentSlide = i; render(); };
-    nav.appendChild(btn);
-  });
+  const dashBtn = document.createElement('button');
+  dashBtn.className = 'nav-pill' + (showDashboard ? ' active' : '');
+  dashBtn.style.cssText = 'border-bottom:0.5px solid rgba(255,255,255,0.08);border-radius:0;padding-bottom:12px;margin-bottom:4px;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600';
+  dashBtn.textContent = 'Dashboard';
+  dashBtn.onclick = () => { showDashboard = true; render(); };
+  nav.appendChild(dashBtn);
+  if (!showDashboard) {
+    SLIDES.filter(s => s.id !== 'dashboard').forEach((s, i) => {
+      const actualIdx = i + 1;
+      const btn = document.createElement('button');
+      const filled = isSlideFilled(s.id);
+      const isActive = opp().currentSlide === actualIdx;
+      btn.className = 'nav-pill' + (isActive ? ' active' : '');
+      btn.innerHTML = s.title + `<span class="nav-pip${filled ? ' filled' : ''}"></span>`;
+      btn.onclick = () => { opp().currentSlide = actualIdx; render(); };
+      nav.appendChild(btn);
+    });
+  }
+  const sidebar = document.querySelector('.sidebar');
+  let healthEl = document.getElementById('sidebarHealth');
+  if (!healthEl) {
+    const div = document.createElement('div');
+    div.id = 'sidebarHealth';
+    div.className = 'sidebar-health';
+    sidebar.appendChild(div);
+  }
 }
 
 function isSlideFilled(id) {
@@ -650,7 +741,15 @@ function isSlideFilled(id) {
 function renderCurrentSlide() {
   const c = document.getElementById('slidesContainer');
   c.innerHTML = '';
-  const sid = SLIDES[opp().currentSlide].id;
+  if (showDashboard) {
+    const slide = document.createElement('div');
+    slide.className = 'slide visible dashboard';
+    slide.innerHTML = buildDashboard();
+    c.appendChild(slide);
+    return;
+  }
+  const idx = opp().currentSlide || 1;
+  const sid = SLIDES[idx] ? SLIDES[idx].id : SLIDES[1].id;
   const slide = document.createElement('div');
   slide.className = 'slide visible';
   slide.innerHTML = buildSlide(sid);
@@ -660,8 +759,240 @@ function renderCurrentSlide() {
 }
 
 /* ================================================================
-   SLIDE BUILDERS
+   HEALTH SCORE  0–100
+   40% MEDDPICC overall | 30% blocker sections | 20% plan completeness | 10% recency
    ================================================================ */
+
+function calcHealthScore(oppData) {
+  const data = oppData || d();
+  const ma = (data.meddpicc && data.meddpicc.meddAnswers) || {};
+
+  // 40% — overall MEDDPICC
+  let mYes = 0, mTotal = 0;
+  MEDD.forEach(s => s.questions.forEach((_, i) => { mTotal++; if (ma[s.id + '_' + i] === 'yes') mYes++; }));
+  const meddPct = mTotal ? mYes / mTotal : 0;
+
+  // 30% — blocker sections (penalise hard: each weak blocker -1/4)
+  const blockers = MEDD.filter(s => s.blocker);
+  let bYes = 0, bTotal = 0;
+  blockers.forEach(s => s.questions.forEach((_, i) => { bTotal++; if (ma[s.id + '_' + i] === 'yes') bYes++; }));
+  const blockerPct = bTotal ? bYes / bTotal : 0;
+
+  // 20% — plan completeness (5 fields, 4% each)
+  let complete = 0;
+  if (data.snapshot.firmName)                         complete++;
+  if (data.stakeholders && data.stakeholders.length)  complete++;
+  if (data.accountpov && data.accountpov.whyChange)   complete++;
+  if (data.opppov && data.opppov.whitespace)          complete++;
+  if (data.map && data.map.topAsk)                    complete++;
+  const completePct = complete / 5;
+
+  // 10% — recency (next touch set = 0.5, last engagement set = 0.5)
+  let recency = 0;
+  if (data.map && data.map.nextTouch)       recency += 0.5;
+  if (data.map && data.map.lastEngagement)  recency += 0.5;
+
+  const score = Math.round(meddPct * 40 + blockerPct * 30 + completePct * 20 + recency * 10);
+  return Math.max(0, Math.min(100, score));
+}
+
+function healthRingSVG(score, size, stroke) {
+  const r = (size - stroke) / 2;
+  const circ = 2 * Math.PI * r;
+  const fill = (score / 100) * circ;
+  const color = score >= 70 ? '#1D9E75' : score >= 40 ? '#EF9F27' : '#a32d2d';
+  const cx = size / 2, cy = size / 2;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex-shrink:0;transform:rotate(-90deg)">
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="${stroke}"/>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+    stroke-dasharray="${fill} ${circ}" stroke-linecap="round"/>
+</svg>`;
+}
+
+function healthRingSVGLight(score, size, stroke) {
+  const r = (size - stroke) / 2;
+  const circ = 2 * Math.PI * r;
+  const fill = (score / 100) * circ;
+  const color = score >= 70 ? '#1D9E75' : score >= 40 ? '#EF9F27' : '#a32d2d';
+  const track = score >= 70 ? '#c0dd97' : score >= 40 ? '#fac775' : '#f7c1c1';
+  const cx = size / 2, cy = size / 2;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex-shrink:0;transform:rotate(-90deg)">
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${track}" stroke-width="${stroke}"/>
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}"
+    stroke-dasharray="${fill} ${circ}" stroke-linecap="round"/>
+</svg>`;
+}
+
+/* ================================================================
+   PIPELINE WATERFALL HELPERS
+   ================================================================ */
+
+function parseARR(str) {
+  if (!str) return 0;
+  const s = str.trim();
+  const n = parseFloat(s.replace(/[^0-9.]/g, ''));
+  if (isNaN(n)) return 0;
+  if (/T$/i.test(s)) return n * 1e12;
+  if (/B$/i.test(s)) return n * 1e9;
+  if (/M$/i.test(s)) return n * 1e6;
+  if (/K$/i.test(s)) return n * 1e3;
+  return n;
+}
+
+function fmtARR(n) {
+  if (n >= 1e9) return '$' + (n / 1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return '$' + Math.round(n / 1e3) + 'K';
+  return n > 0 ? '$' + n : '—';
+}
+
+function oppForecast(a) {
+  const ma = (a.data.meddpicc && a.data.meddpicc.meddAnswers) || {};
+  const bl = MEDD.filter(s => s.blocker);
+  let bY = 0, bT = 0, tY = 0, tQ = 0;
+  bl.forEach(s => s.questions.forEach((_, i) => { bT++; if (ma[s.id + '_' + i] === 'yes') bY++; }));
+  MEDD.forEach(s => s.questions.forEach((_, i) => { tQ++; if (ma[s.id + '_' + i] === 'yes') tY++; }));
+  const p = tY / tQ, bp = bY / bT;
+  if (bp >= 0.75 && p >= 0.70) return 'Commit';
+  if (bp >= 0.55 && p >= 0.50) return 'Upside';
+  if (p >= 0.25 || tY >= 5) return 'Pipeline';
+  return 'Omit';
+}
+
+/* ================================================================
+   DASHBOARD BUILDER
+   ================================================================ */
+
+function buildDashboard() {
+  const hasOpps = opps.some(a => a.name !== 'New account' || a.data.snapshot.firmName);
+  const realOpps = opps.filter(a => a.data.snapshot.firmName || a.data.stakeholders.length || (a.data.meddpicc && Object.keys(a.data.meddpicc.meddAnswers || {}).length));
+
+  if (realOpps.length === 0) return buildOnboarding();
+
+  // Waterfall data
+  const buckets = { Commit: { arr: 0, count: 0 }, Upside: { arr: 0, count: 0 }, Pipeline: { arr: 0, count: 0 }, Omit: { arr: 0, count: 0 } };
+  opps.forEach(a => {
+    const fc = oppForecast(a);
+    const arr = parseARR(a.data.snapshot.targetArr);
+    buckets[fc].arr += arr;
+    buckets[fc].count++;
+  });
+  const totalARR = Object.values(buckets).reduce((s, b) => s + b.arr, 0);
+  const maxBucket = Math.max(...Object.values(buckets).map(b => b.arr), 1);
+
+  const wfColors = { Commit: 'wf-fill-commit', Upside: 'wf-fill-upside', Pipeline: 'wf-fill-pipeline', Omit: 'wf-fill-omit' };
+  const wfBars = ['Commit', 'Upside', 'Pipeline', 'Omit'].map(fc => {
+    const b = buckets[fc];
+    const pct = Math.round((b.arr / maxBucket) * 100);
+    return `<div class="wf-bar">
+  <div class="wf-bar-label">${fc}</div>
+  <div class="wf-bar-track"><div class="wf-bar-fill ${wfColors[fc]}" style="width:${pct}%"></div></div>
+  <div class="wf-bar-arr">${fmtARR(b.arr)}</div>
+  <div class="wf-bar-count">${b.count} opp${b.count !== 1 ? 's' : ''}</div>
+</div>`;
+  }).join('');
+
+  // Opportunity cards
+  const cards = opps.map((a, idx) => {
+    const hs = calcHealthScore(a.data);
+    const hsColor = hs >= 70 ? '#1D9E75' : hs >= 40 ? '#EF9F27' : '#a32d2d';
+    const hsTextColor = hs >= 70 ? 'var(--text-success)' : hs >= 40 ? 'var(--text-warning)' : 'var(--text-danger)';
+    const fc = oppForecast(a);
+    const fcClass = FC_CLASS[fc] || 'fc-omit';
+    const ma = (a.data.meddpicc && a.data.meddpicc.meddAnswers) || {};
+    let mYes = 0, mTotal = 0;
+    MEDD.forEach(s => s.questions.forEach((_, i) => { mTotal++; if (ma[s.id + '_' + i] === 'yes') mYes++; }));
+    const meddPct = mTotal ? Math.round((mYes / mTotal) * 100) : 0;
+    const s = a.data.snapshot;
+    const champion = a.data.stakeholders.find(st => st.role === 'Champion');
+    const nextTouch = a.data.map.nextTouch || '—';
+    const r = 20, stroke = 3, circ = 2 * Math.PI * r, fillArc = (hs / 100) * circ;
+    const ring = `<svg width="48" height="48" viewBox="0 0 48 48" style="flex-shrink:0;transform:rotate(-90deg)">
+  <circle cx="24" cy="24" r="${r}" fill="none" stroke="var(--border-light)" stroke-width="${stroke}"/>
+  <circle cx="24" cy="24" r="${r}" fill="none" stroke="${hsColor}" stroke-width="${stroke}"
+    stroke-dasharray="${fillArc} ${circ}" stroke-linecap="round"/>
+</svg>`;
+
+    return `<div class="opp-card" onclick="openOpp(${idx})">
+  <div class="opp-card-top">
+    <div>
+      <div class="opp-card-name">${esc(a.name)}</div>
+      <div class="opp-card-type">${esc(s.firmType || 'Prospect')} ${s.aum ? '· ' + esc(s.aum) : ''}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+      ${ring}
+      <div style="font-size:11px;font-weight:600;color:${hsTextColor}">${hs}</div>
+    </div>
+  </div>
+  <div class="opp-card-mid">
+    <div class="opp-card-stat">
+      <div class="stat-label">Target ARR</div>
+      <div class="stat-val">${esc(s.targetArr || '—')}</div>
+      <div class="stat-sub">${esc(s.currentArr || '$0 current')}</div>
+    </div>
+    <div class="opp-card-stat">
+      <div class="stat-label">Next touch</div>
+      <div class="stat-val" style="font-size:12px;font-weight:500">${esc(nextTouch)}</div>
+      <div class="stat-sub">${champion ? 'Champion: ' + esc(champion.name) : 'No champion set'}</div>
+    </div>
+  </div>
+  <div class="opp-card-footer">
+    <div class="medd-prog">
+      <div class="medd-prog-label"><span>MEDDPICC</span><span>${mYes}/${mTotal}</span></div>
+      <div class="medd-prog-track"><div class="medd-prog-fill" style="width:${meddPct}%"></div></div>
+    </div>
+    <span class="forecast-badge ${fcClass}">${fc}</span>
+  </div>
+</div>`;
+  }).join('');
+
+  return `<div class="dashboard">
+<div class="dash-header">
+  <div class="dash-title">Pipeline overview</div>
+  <div class="dash-subtitle">${opps.length} opportunit${opps.length !== 1 ? 'ies' : 'y'} · ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
+</div>
+<div class="waterfall">
+  <div class="waterfall-title">Target ARR by forecast</div>
+  <div class="waterfall-bars">${wfBars}</div>
+  <div class="waterfall-total">
+    <span class="wf-total-label">Total pipeline</span>
+    <span class="wf-total-arr">${fmtARR(totalARR)}</span>
+    <span class="wf-total-sub">target ARR across ${opps.length} opp${opps.length !== 1 ? 's' : ''}</span>
+  </div>
+</div>
+<div class="opp-cards">
+  ${cards}
+  <div class="opp-card-add" onclick="addOpp()">
+    <div class="opp-card-add-plus">+</div>
+    <div class="opp-card-add-label">Add opportunity</div>
+  </div>
+</div>
+</div>`;
+}
+
+function buildOnboarding() {
+  return `<div class="onboarding">
+<div class="onboarding-icon">🎯</div>
+<div class="onboarding-title">Welcome to Eleven's Opportunity Plan</div>
+<div class="onboarding-desc">A unified qualification and account planning tool built for UHNW family office and wealth management sales. MEDDPICC-native, call analysis built in.</div>
+<div class="onboarding-steps">
+  <div class="onboarding-step"><div class="onboarding-step-num">01</div><div class="onboarding-step-text">Build your account snapshot and stakeholder map</div></div>
+  <div class="onboarding-step"><div class="onboarding-step-num">02</div><div class="onboarding-step-text">Qualify with MEDDPICC — gaps surface automatically</div></div>
+  <div class="onboarding-step"><div class="onboarding-step-num">03</div><div class="onboarding-step-text">Paste call transcripts — Claude maps findings to your plan</div></div>
+  <div class="onboarding-step"><div class="onboarding-step-num">04</div><div class="onboarding-step-text">Track all opportunities in the pipeline log</div></div>
+</div>
+<button class="onboarding-cta" onclick="addOpp()">Create your first opportunity →</button>
+</div>`;
+}
+
+function openOpp(idx) {
+  showDashboard = false;
+  currentOpp = idx;
+  opps[idx].currentSlide = 1;
+  render();
+}
+
+
 
 function buildSlide(id) {
   if (id === 'snapshot')     return buildSnapshot();
@@ -1045,12 +1376,13 @@ function addGapRow() {
   render();
 }
 function removeGapRow(i) { d().meddpicc.gapOverrides.__manual.splice(i, 1); render(); }
-function switchOpp(idx) { currentOpp = idx; render(); }
+function switchOpp(idx) { showDashboard = false; currentOpp = idx; render(); }
 function addOpp() {
-  const name = prompt('Account / firm name:');
+  const name = prompt("Opportunity / firm name:");
   if (!name || !name.trim()) return;
-  opps.push({ name: name.trim(), currentSlide: 0, openMedd: new Set(['metrics']), data: freshData() });
-  currentOpp = accounts.length - 1;
+  opps.push({ name: name.trim(), currentSlide: 1, openMedd: new Set(["metrics"]), data: freshData() });
+  currentOpp = opps.length - 1;
+  showDashboard = false;
   render();
 }
 
