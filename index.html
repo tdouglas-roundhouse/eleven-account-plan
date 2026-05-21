@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eleven Systems — Account Plan</title>
+<title>Eleven Systems — Opportunity Plan</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -37,12 +37,12 @@ body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-pri
 .fc-pipeline{background:var(--bg-warning);color:var(--text-warning);border:0.5px solid var(--border-warning)}
 .fc-omit{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
 .main{max-width:760px;margin:0 auto;padding:20px 24px 60px}
-.acct-bar{display:flex;gap:6px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
-.acct-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;transition:all 0.15s}
-.acct-btn:hover{background:var(--bg-tertiary)}
-.acct-btn.active{background:var(--bg-info);color:var(--text-info);border-color:var(--border-info);font-weight:500}
-.add-acct-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px dashed var(--border-mid);background:transparent;color:var(--text-tertiary);cursor:pointer}
-.add-acct-btn:hover{color:var(--text-secondary);border-color:var(--border-strong)}
+.opp-bar{display:flex;gap:6px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.opp-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;transition:all 0.15s}
+.opp-btn:hover{background:var(--bg-tertiary)}
+.opp-btn.active{background:var(--bg-info);color:var(--text-info);border-color:var(--border-info);font-weight:500}
+.add-opp-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px dashed var(--border-mid);background:transparent;color:var(--text-tertiary);cursor:pointer}
+.add-opp-btn:hover{color:var(--text-secondary);border-color:var(--border-strong)}
 .slide-nav{display:flex;gap:4px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
 .slide-tab{font-size:12px;font-family:var(--font);padding:5px 12px;border-radius:20px;border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:all 0.12s}
 .slide-tab:hover{background:var(--bg-tertiary)}
@@ -167,30 +167,98 @@ select.field-input{cursor:pointer}
 .action-btn:hover{background:var(--bg-tertiary)}
 .action-btn.primary{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary)}
 .action-btn.primary:hover{opacity:0.85}
+/* Log panel */
+.log-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;align-items:flex-start;justify-content:center;padding:40px 16px}
+.log-overlay.open{display:flex}
+.log-panel{background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:820px;max-height:calc(100vh - 80px);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,0.18)}
+.log-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:0.5px solid var(--border-light);flex-shrink:0}
+.log-header h2{font-size:15px;font-weight:600;letter-spacing:-0.01em}
+.log-header-right{display:flex;gap:8px;align-items:center}
+.log-close{font-size:13px;font-family:var(--font);padding:5px 12px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:transparent;color:var(--text-secondary);cursor:pointer}
+.log-close:hover{background:var(--bg-tertiary)}
+.log-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 20px;border-bottom:0.5px solid var(--border-light);flex-shrink:0}
+.log-stat{text-align:center}
+.log-stat .ls-val{font-size:20px;font-weight:600;color:var(--text-primary);line-height:1}
+.log-stat .ls-lbl{font-size:10px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin-top:3px}
+.log-body{overflow-y:auto;flex:1;padding:12px 20px 20px}
+.log-table{width:100%;border-collapse:collapse;font-size:13px}
+.log-table th{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);padding:6px 10px;text-align:left;border-bottom:0.5px solid var(--border-mid);white-space:nowrap;position:sticky;top:0;background:var(--bg-primary)}
+.log-table td{padding:8px 10px;border-bottom:0.5px solid var(--border-light);vertical-align:middle}
+.log-table tr:last-child td{border-bottom:none}
+.log-table tr:hover td{background:var(--bg-secondary);cursor:pointer}
+.log-name{font-weight:500;color:var(--text-primary)}
+.log-sub{font-size:11px;color:var(--text-tertiary);margin-top:2px}
+.log-arr{font-size:12px;color:var(--text-secondary)}
+.log-arr-target{font-size:11px;color:var(--text-tertiary)}
+.log-medd{font-size:12px;color:var(--text-secondary)}
+.log-medd-bar{height:4px;border-radius:2px;background:var(--border-light);margin-top:4px;overflow:hidden;width:60px}
+.log-medd-fill{height:100%;border-radius:2px;background:var(--green-pip);transition:width 0.3s}
+.log-next{font-size:12px;color:var(--text-secondary)}
+.log-updated{font-size:11px;color:var(--text-tertiary)}
+.log-empty{padding:40px 0;text-align:center;color:var(--text-tertiary);font-size:13px}
+.save-indicator{font-size:11px;color:var(--text-success);opacity:0;transition:opacity 0.4s;white-space:nowrap}
+.save-indicator.show{opacity:1}
+.log-open-btn{font-size:12px;font-family:var(--font);padding:5px 12px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;gap:5px}
+.log-open-btn:hover{background:var(--bg-tertiary)}
+.log-open-btn .log-count{font-size:10px;font-weight:600;background:var(--text-primary);color:var(--bg-primary);border-radius:10px;padding:1px 5px;min-width:16px;text-align:center}
 @media(max-width:540px){
   .field-grid,.pov-grid{grid-template-columns:1fr}
   .field-grid-3{grid-template-columns:1fr 1fr}
   .page-header{padding:14px 16px 10px}
   .main{padding:14px 12px 40px}
   .medd-score-bar{grid-template-columns:repeat(2,1fr)}
+  .log-summary{grid-template-columns:repeat(2,1fr)}
+  .log-overlay{padding:0}
+  .log-panel{max-height:100vh;border-radius:0}
 }
 </style>
 </head>
 <body>
 <div class="page-header">
   <div class="page-header-left">
-    <h1>Eleven Systems — Account Plan</h1>
-    <p>Unified account plan + MEDDPICC qualifier</p>
+    <h1>Eleven Systems — Opportunity Plan</h1>
+    <p>Unified opportunity plan + MEDDPICC qualifier</p>
   </div>
   <div class="header-score" id="headerScore"></div>
+  <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+    <span class="save-indicator" id="saveIndicator">&#10003; Saved</span>
+    <button class="log-open-btn" onclick="openLog()">Pipeline log <span class="log-count" id="logCount">0</span></button>
+  </div>
 </div>
+
+<div class="log-overlay" id="logOverlay" onclick="closeLogOnBg(event)">
+  <div class="log-panel">
+    <div class="log-header">
+      <h2>Opportunity Log</h2>
+      <button class="log-close" onclick="closeLog()">Close</button>
+    </div>
+    <div class="log-summary" id="logSummary"></div>
+    <div class="log-body">
+      <table class="log-table">
+        <thead><tr>
+          <th style="width:180px">Opportunity</th>
+          <th style="width:90px">Type</th>
+          <th style="width:110px">ARR</th>
+          <th style="width:80px">MEDDPICC</th>
+          <th>Forecast</th>
+          <th style="width:120px">Next touch</th>
+          <th style="width:90px">Saved</th>
+        </tr></thead>
+        <tbody id="logTableBody"></tbody>
+      </table>
+      <div class="log-empty" id="logEmpty" style="display:none">No saved opportunities yet. Hit "Save to log" on any plan.</div>
+    </div>
+  </div>
+</div>
+
 <div class="main">
-  <div class="acct-bar" id="acctBar"></div>
+  <div class="opp-bar" id="oppBar"></div>
   <div class="slide-nav" id="slideNav"></div>
   <div class="slide-progress" id="slideProgress"></div>
   <div id="slidesContainer"></div>
   <div class="bottom-bar">
-    <button class="action-btn" onclick="addAcct()">+ Add account</button>
+    <button class="action-btn" onclick="addOpp()">+ Add opportunity</button>
+    <button class="action-btn" onclick="saveToLog()">Save to log</button>
     <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
   </div>
 </div>
@@ -367,10 +435,10 @@ function freshData() {
   };
 }
 
-let accounts = [{ name: 'New account', currentSlide: 0, openMedd: new Set(['metrics']), data: freshData() }];
-let currentAcct = 0;
-function acct() { return accounts[currentAcct]; }
-function d() { return acct().data; }
+let opps = [{ name: 'New account', currentSlide: 0, openMedd: new Set(['metrics']), data: freshData() }];
+let currentOpp = 0;
+function opp() { return opps[currentOpp]; }
+function d() { return opp().data; }
 function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
 /* ================================================================
@@ -428,20 +496,20 @@ function renderHeaderScore() {
 }
 
 function renderAcctBar() {
-  const bar = document.getElementById('acctBar');
+  const bar = document.getElementById('oppBar');
   bar.innerHTML = '';
-  accounts.forEach((a, i) => {
+  opps.forEach((a, i) => {
     const btn = document.createElement('button');
-    btn.className = 'acct-btn' + (i === currentAcct ? ' active' : '');
+    btn.className = 'opp-btn' + (i === currentOpp ? ' active' : '');
     btn.textContent = a.name;
-    btn.onclick = () => switchAcct(i);
-    btn.ondblclick = () => { const n = prompt('Rename:', a.name); if (n && n.trim()) { accounts[i].name = n.trim(); renderAcctBar(); } };
+    btn.onclick = () => switchOpp(i);
+    btn.ondblclick = () => { const n = prompt('Rename:', a.name); if (n && n.trim()) { opps[i].name = n.trim(); renderAcctBar(); } };
     bar.appendChild(btn);
   });
   const add = document.createElement('button');
-  add.className = 'add-acct-btn';
-  add.textContent = '+ Add account';
-  add.onclick = addAcct;
+  add.className = 'add-opp-btn';
+  add.textContent = '+ Add opportunity';
+  add.onclick = addOpp;
   bar.appendChild(add);
 }
 
@@ -450,9 +518,9 @@ function renderSlideNav() {
   nav.innerHTML = '';
   SLIDES.forEach((s, i) => {
     const btn = document.createElement('button');
-    btn.className = 'slide-tab' + (i === acct().currentSlide ? ' active' : '');
+    btn.className = 'slide-tab' + (i === opp().currentSlide ? ' active' : '');
     btn.textContent = s.icon + ' ' + s.title;
-    btn.onclick = () => { acct().currentSlide = i; render(); };
+    btn.onclick = () => { opp().currentSlide = i; render(); };
     nav.appendChild(btn);
   });
 }
@@ -462,21 +530,21 @@ function renderProgress() {
   bar.innerHTML = '';
   SLIDES.forEach((s, i) => {
     const dot = document.createElement('div');
-    dot.className = 'prog-dot' + (i === acct().currentSlide ? ' active' : isSlideFilled(s.id) ? ' filled' : '');
+    dot.className = 'prog-dot' + (i === opp().currentSlide ? ' active' : isSlideFilled(s.id) ? ' filled' : '');
     dot.title = s.title;
-    dot.onclick = () => { acct().currentSlide = i; render(); };
+    dot.onclick = () => { opp().currentSlide = i; render(); };
     bar.appendChild(dot);
   });
   const nav = document.createElement('div');
   nav.className = 'prog-nav';
   const prev = document.createElement('button');
   prev.textContent = '← Prev';
-  prev.disabled = acct().currentSlide === 0;
-  prev.onclick = () => { if (acct().currentSlide > 0) { acct().currentSlide--; render(); } };
+  prev.disabled = opp().currentSlide === 0;
+  prev.onclick = () => { if (opp().currentSlide > 0) { opp().currentSlide--; render(); } };
   const next = document.createElement('button');
   next.textContent = 'Next →';
-  next.disabled = acct().currentSlide === SLIDES.length - 1;
-  next.onclick = () => { if (acct().currentSlide < SLIDES.length - 1) { acct().currentSlide++; render(); } };
+  next.disabled = opp().currentSlide === SLIDES.length - 1;
+  next.onclick = () => { if (opp().currentSlide < SLIDES.length - 1) { opp().currentSlide++; render(); } };
   nav.appendChild(prev);
   nav.appendChild(next);
   bar.appendChild(nav);
@@ -494,7 +562,7 @@ function isSlideFilled(id) {
 function renderCurrentSlide() {
   const c = document.getElementById('slidesContainer');
   c.innerHTML = '';
-  const sid = SLIDES[acct().currentSlide].id;
+  const sid = SLIDES[opp().currentSlide].id;
   const slide = document.createElement('div');
   slide.className = 'slide visible';
   slide.innerHTML = buildSlide(sid);
@@ -707,7 +775,7 @@ ${buildGapsTable()}
 }
 
 function buildMeddSection(s) {
-  const isOpen = acct().openMedd.has(s.id);
+  const isOpen = opp().openMedd.has(s.id);
   const a = d().opportunity.meddAnswers;
   const notes = d().opportunity.meddNotes;
   const yes = meddYes(s.id, s.questions.length);
@@ -874,7 +942,7 @@ function setDeep(path, val) {
   obj[parts[parts.length - 1]] = val;
 }
 function toggleMedd(id) {
-  const s = acct().openMedd;
+  const s = opp().openMedd;
   if (s.has(id)) s.delete(id); else s.add(id);
   renderCurrentSlide();
   renderHeaderScore();
@@ -898,12 +966,12 @@ function addGapRow() {
   render();
 }
 function removeGapRow(i) { d().opportunity.gapOverrides.__manual.splice(i, 1); render(); }
-function switchAcct(idx) { currentAcct = idx; render(); }
-function addAcct() {
+function switchOpp(idx) { currentOpp = idx; render(); }
+function addOpp() {
   const name = prompt('Account / firm name:');
   if (!name || !name.trim()) return;
-  accounts.push({ name: name.trim(), currentSlide: 0, openMedd: new Set(['metrics']), data: freshData() });
-  currentAcct = accounts.length - 1;
+  opps.push({ name: name.trim(), currentSlide: 0, openMedd: new Set(['metrics']), data: freshData() });
+  currentOpp = accounts.length - 1;
   render();
 }
 
@@ -913,7 +981,7 @@ function addAcct() {
 
 function exportPlan() {
   let out = 'ELEVEN SYSTEMS — ACCOUNT PLAN\nGenerated: ' + new Date().toLocaleDateString() + '\n\n';
-  accounts.forEach(a => {
+  opps.forEach(a => {
     out += '══════════════════════════════\n' + a.name.toUpperCase() + '\n══════════════════════════════\n\n';
     const s = a.data.snapshot;
     out += 'SNAPSHOT\nType: ' + (s.firmType || '—') + ' | AUM: ' + (s.aum || '—') + ' | Journey: ' + (s.journey || '—') + ' | Health: ' + (s.healthStatus || '—') + '\n';
@@ -958,11 +1026,162 @@ function exportPlan() {
   const blob = new Blob([out], { type: 'text/plain' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'eleven_account_plan_' + new Date().toISOString().slice(0, 10) + '.txt';
+  link.download = 'eleven_opportunity_plan_' + new Date().toISOString().slice(0, 10) + '.txt';
   link.click();
 }
 
+/* ================================================================
+   OPPORTUNITY LOG
+   Uses localStorage so the log persists across browser sessions.
+   Key: 'eleven_opp_log'  Value: JSON array of log entries.
+   ================================================================ */
+
+function getLog() {
+  try { return JSON.parse(localStorage.getItem('eleven_opp_log') || '[]'); }
+  catch(e) { return []; }
+}
+function setLog(entries) {
+  try { localStorage.setItem('eleven_opp_log', JSON.stringify(entries)); }
+  catch(e) {}
+}
+
+function buildLogEntry(a) {
+  const s = a.data.snapshot;
+  const o = a.data.opportunity;
+  const m = a.data.map;
+  const ma = o.meddAnswers || {};
+  let yes = 0, total = 0;
+  MEDD.forEach(ms => ms.questions.forEach((_, i) => {
+    total++;
+    if (ma[ms.id + '_' + i] === 'yes') yes++;
+  }));
+  const bl = MEDD.filter(sec => sec.blocker);
+  let bY = 0, bT = 0;
+  bl.forEach(ms => ms.questions.forEach((_, i) => { bT++; if (ma[ms.id + '_' + i] === 'yes') bY++; }));
+  const p = yes / total, bp = bY / bT;
+  let fc = 'Omit';
+  if (bp >= 0.75 && p >= 0.70) fc = 'Commit';
+  else if (bp >= 0.55 && p >= 0.50) fc = 'Upside';
+  else if (p >= 0.25 || yes >= 5) fc = 'Pipeline';
+  return {
+    id: a.id || (a.id = Date.now() + '_' + Math.random().toString(36).slice(2)),
+    name: a.name,
+    firmType: s.firmType || '',
+    aum: s.aum || '',
+    currentArr: s.currentArr || '',
+    targetArr: s.targetArr || '',
+    healthStatus: s.healthStatus || '',
+    journey: s.journey || '',
+    meddScore: yes,
+    meddTotal: total,
+    forecast: fc,
+    nextTouch: m.nextTouch || '',
+    topAsk: m.topAsk || '',
+    savedAt: new Date().toISOString()
+  };
+}
+
+function saveToLog() {
+  // Ensure the current opp has a stable id
+  if (!opps[currentOpp].id) opps[currentOpp].id = Date.now() + '_' + Math.random().toString(36).slice(2);
+  const entry = buildLogEntry(opps[currentOpp]);
+  const log = getLog();
+  const idx = log.findIndex(e => e.id === entry.id);
+  if (idx >= 0) log[idx] = entry;  // update existing
+  else log.unshift(entry);          // prepend new
+  setLog(log);
+  updateLogCount();
+  // Flash save indicator
+  const ind = document.getElementById('saveIndicator');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 2000);
+}
+
+function updateLogCount() {
+  const el = document.getElementById('logCount');
+  if (el) el.textContent = getLog().length;
+}
+
+function openLog() {
+  renderLog();
+  document.getElementById('logOverlay').classList.add('open');
+}
+
+function closeLog() {
+  document.getElementById('logOverlay').classList.remove('open');
+}
+
+function closeLogOnBg(e) {
+  if (e.target === document.getElementById('logOverlay')) closeLog();
+}
+
+function renderLog() {
+  const log = getLog();
+  // Summary bar
+  const summary = document.getElementById('logSummary');
+  const totalARR = log.reduce((sum, e) => {
+    const n = parseFloat((e.targetArr || '').replace(/[^0-9.]/g, ''));
+    const mult = /T$/i.test(e.targetArr) ? 1e12 : /B$/i.test(e.targetArr) ? 1e9 : /M$/i.test(e.targetArr) ? 1e6 : /K$/i.test(e.targetArr) ? 1e3 : 1;
+    return sum + (isNaN(n) ? 0 : n * mult);
+  }, 0);
+  const commits = log.filter(e => e.forecast === 'Commit').length;
+  const upsides = log.filter(e => e.forecast === 'Upside').length;
+  const pipes   = log.filter(e => e.forecast === 'Pipeline').length;
+  function fmtARR(n) {
+    if (n >= 1e9) return '$' + (n/1e9).toFixed(1) + 'B';
+    if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+    return n > 0 ? '$' + n : '—';
+  }
+  summary.innerHTML = `
+    <div class="log-stat"><div class="ls-val">${log.length}</div><div class="ls-lbl">Opportunities</div></div>
+    <div class="log-stat"><div class="ls-val">${fmtARR(totalARR)}</div><div class="ls-lbl">Target ARR</div></div>
+    <div class="log-stat"><div class="ls-val" style="color:var(--text-success)">${commits}</div><div class="ls-lbl">Commit</div></div>
+    <div class="log-stat"><div class="ls-val" style="color:var(--text-info)">${upsides} <span style="font-size:13px;color:var(--text-tertiary)">/ ${pipes}</span></div><div class="ls-lbl">Upside / Pipeline</div></div>
+  `;
+  // Table rows
+  const tbody = document.getElementById('logTableBody');
+  const empty = document.getElementById('logEmpty');
+  if (log.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  const FC_CLASS = { Commit: 'fc-commit', Upside: 'fc-upside', Pipeline: 'fc-pipeline', Omit: 'fc-omit' };
+  tbody.innerHTML = log.map((e, i) => {
+    const pct = Math.round((e.meddScore / e.meddTotal) * 100);
+    const saved = new Date(e.savedAt);
+    const savedStr = saved.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return `<tr onclick="jumpToOpp('${e.id}')">
+  <td>
+    <div class="log-name">${esc(e.name)}</div>
+    <div class="log-sub">${esc(e.aum || '—')} ${e.journey ? '· ' + e.journey : ''}</div>
+  </td>
+  <td><span style="font-size:12px;color:var(--text-secondary)">${esc(e.firmType || '—')}</span></td>
+  <td>
+    <div class="log-arr">${esc(e.currentArr || '—')}</div>
+    <div class="log-arr-target">&#8594; ${esc(e.targetArr || '—')}</div>
+  </td>
+  <td>
+    <div class="log-medd">${e.meddScore}/${e.meddTotal}</div>
+    <div class="log-medd-bar"><div class="log-medd-fill" style="width:${pct}%"></div></div>
+  </td>
+  <td><span class="forecast-badge ${FC_CLASS[e.forecast] || 'fc-omit'}" style="font-size:11px;padding:2px 9px">${e.forecast}</span></td>
+  <td><span class="log-next">${esc(e.nextTouch || '—')}</span></td>
+  <td><span class="log-updated">${savedStr}</span></td>
+</tr>`;
+  }).join('');
+}
+
+function jumpToOpp(id) {
+  const idx = opps.findIndex(o => o.id === id);
+  if (idx >= 0) { currentOpp = idx; closeLog(); render(); }
+  else { alert('This opportunity is in the log but not in the current session. Reload the plan and re-save to sync.'); }
+}
+
 render();
+updateLogCount();
 </script>
 </body>
 </html>
