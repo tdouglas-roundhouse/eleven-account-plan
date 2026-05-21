@@ -684,7 +684,7 @@ function renderSidebar() {
   const dashBtn = document.createElement('button');
   dashBtn.className = 'nav-pill' + (showDashboard && !showPipeline ? ' active' : '');
   dashBtn.style.cssText = topPillStyle;
-  dashBtn.textContent = 'OVERVIEW';
+  dashBtn.textContent = 'DASHBOARD';
   dashBtn.onclick = () => { showDashboard = true; showPipeline = false; render(); };
   nav.appendChild(dashBtn);
 
