@@ -770,7 +770,7 @@ function renderCurrentSlide() {
   }
   if (showDashboard) {
     const slide = document.createElement('div');
-    slide.className = 'slide visible dashboard';
+    slide.className = 'slide visible';
     slide.innerHTML = buildDashboard();
     c.appendChild(slide);
     return;
@@ -982,11 +982,8 @@ function buildDashboard() {
 </div>`;
   }).join('');
 
-  return `<div class="dashboard">
-<div class="dash-header">
-  <div class="dash-title">Opportunity Dashboard</div>
-  <div class="dash-subtitle">${opps.length} opportunit${opps.length !== 1 ? 'ies' : 'y'} · ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
-</div>
+  return `<div class="slide-title">Opportunity Dashboard</div>
+<div class="dash-subtitle" style="font-size:13px;color:var(--text-tertiary);margin-top:-10px;margin-bottom:18px">${opps.length} opportunit${opps.length !== 1 ? 'ies' : 'y'} · ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
 <div class="waterfall">
   <div class="waterfall-title">Target ARR by forecast</div>
   <div class="waterfall-bars">${wfBars}</div>
@@ -1002,7 +999,6 @@ function buildDashboard() {
     <div class="opp-card-add-plus">+</div>
     <div class="opp-card-add-label">Add opportunity</div>
   </div>
-</div>
 </div>`;
 }
 
