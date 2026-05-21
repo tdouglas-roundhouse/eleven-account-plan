@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eleven Systems — Opportunity Plan</title>
+<title>Opportunity Plan</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -365,6 +365,18 @@ select.field-input{cursor:pointer}
 .call-remove{font-size:11px;color:var(--text-tertiary);background:none;border:none;cursor:pointer;font-family:var(--font);padding:0}
 .call-remove:hover{color:var(--text-danger)}
 .red-flag-box{background:var(--bg-danger);border:0.5px solid var(--border-danger);border-radius:var(--radius-md);padding:10px 12px;margin-bottom:8px}
+.coaching-section{margin-top:16px;padding-top:14px;border-top:0.5px solid var(--border-light)}
+.coaching-header{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.coaching-header::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green-pip)}
+.coaching-step{display:flex;gap:10px;padding:9px 12px;border-radius:var(--radius-md);background:var(--bg-primary);border:0.5px solid var(--border-light);margin-bottom:6px}
+.coaching-step:last-child{margin-bottom:0}
+.coaching-priority{flex-shrink:0;width:6px;height:6px;border-radius:50%;margin-top:5px}
+.coaching-priority.high{background:#a32d2d}
+.coaching-priority.medium{background:#EF9F27}
+.coaching-body{flex:1}
+.coaching-action{font-size:12px;font-weight:500;color:var(--text-primary);line-height:1.45;margin-bottom:2px}
+.coaching-rationale{font-size:11px;color:var(--text-tertiary);line-height:1.4}
+.coaching-tag{font-size:10px;font-weight:500;color:var(--text-tertiary);background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:4px;padding:1px 6px;margin-top:4px;display:inline-block;text-transform:uppercase;letter-spacing:0.04em}
 .red-flag-label{font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-danger);margin-bottom:4px}
 .red-flag-text{font-size:13px;color:var(--text-primary)}
 
@@ -603,7 +615,7 @@ const SLIDES = [
   { id: 'opppov',       title: 'Opportunity POV'     },
   { id: 'meddpicc',     title: 'MEDDPICC'            },
   { id: 'map',          title: 'Mutual Action Plan'  },
-  { id: 'calls',        title: 'Call Analysis'       },
+  { id: 'calls',        title: 'Call Analysis & Coaching' },
   { id: 'bizasks',      title: 'Business Asks'       },
   { id: 'pipeline',     title: 'Pipeline'            }
 ];
@@ -2140,6 +2152,7 @@ function buildCalls() {
       const pending  = (c.findings || []).filter(f => !f.status).length;
       const isOpen   = c.open !== false;
       let findingsHTML = '';
+      let coachingHTML = '';
       if (isOpen && c.findings && c.findings.length > 0) {
         const redFlags = c.findings.filter(f => f.type === 'red_flag');
         const others   = c.findings.filter(f => f.type !== 'red_flag');
@@ -2171,6 +2184,21 @@ function buildCalls() {
 </div>`;
         }).join('') + '</div>';
       }
+
+      // Coaching steps
+      if (isOpen && c.coaching && c.coaching.length > 0) {
+        coachingHTML = `<div class="coaching-section">
+  <div class="coaching-header">Coaching — before your next call</div>
+  ${c.coaching.map(cs => `<div class="coaching-step">
+    <div class="coaching-priority ${cs.priority || 'medium'}"></div>
+    <div class="coaching-body">
+      <div class="coaching-action">${esc(cs.action)}</div>
+      ${cs.rationale ? `<div class="coaching-rationale">${esc(cs.rationale)}</div>` : ''}
+      ${cs.section ? `<span class="coaching-tag">${esc(cs.section)}</span>` : ''}
+    </div>
+  </div>`).join('')}
+</div>`;
+      }
       return `<div class="call-entry">
   <div class="call-entry-header" onclick="toggleCall(${ci})">
     <div class="call-entry-meta">
@@ -2185,13 +2213,14 @@ function buildCalls() {
   </div>
   ${isOpen ? `<div class="call-entry-body">
     <div class="call-transcript-preview">${esc((c.transcript || '').slice(0, 400))}${(c.transcript || '').length > 400 ? '…' : ''}</div>
-    ${findingsHTML || '<div style="font-size:12px;color:var(--text-tertiary)">No findings yet.</div>'}
+    ${findingsHTML || '<div style="font-size:12px;color:var(--text-tertiary);padding:4px 0">No findings yet.</div>'}
+    ${coachingHTML}
   </div>` : ''}
 </div>`;
     }).join('') + '</div>';
   }
 
-  return `<div class="slide-title">Call Analysis</div>
+  return `<div class="slide-title">Call Analysis & Coaching</div>
 ${callsHTML}
 <div class="call-form">
   <div class="call-form-title">Log a new call</div>
@@ -2307,7 +2336,22 @@ Rules:
 - For type "action": apply.field = "map.nextTouch", apply.value = suggested next action
 - For type "red_flag": no apply needed — these are warnings only. Use for signs champion is stalling, EB is blocked, competitor is advancing, or trust has eroded.
 - Be conservative. Prefer fewer high-confidence findings over many speculative ones.
-- Maximum 10 findings total.`;
+- Maximum 10 findings total.
+
+Also return a "coaching" array of 3-5 next steps the rep should take before the next call, based on the gaps identified. Each step should be specific, actionable, and directly tied to a weakness in the current plan.
+
+Return this exact structure — both keys required:
+{
+  "findings": [ ... ],
+  "coaching": [
+    {
+      "priority": "high" | "medium",
+      "action": "specific action (max 15 words)",
+      "rationale": "why this matters for the deal (max 20 words)",
+      "section": "meddpicc | stakeholder | pov | map | bizask"
+    }
+  ]
+}`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -2334,6 +2378,7 @@ Rules:
       participants,
       transcript,
       findings,
+      coaching: parsed.coaching || [],
       open: true
     });
 
