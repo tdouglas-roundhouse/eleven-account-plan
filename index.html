@@ -60,7 +60,7 @@ body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-pri
 .add-opp-btn{font-size:12px;font-family:var(--font);padding:5px 10px;border-radius:6px;border:0.5px dashed rgba(255,255,255,0.18);background:transparent;color:rgba(255,255,255,0.35);cursor:pointer;text-align:left;width:100%;margin-top:2px}
 .add-opp-btn:hover{color:rgba(255,255,255,0.65);border-color:rgba(255,255,255,0.35)}
 
-.sidebar-nav{padding:14px 14px 0;flex:1}
+.sidebar-nav{padding:14px 14px 0;flex:1;display:flex;flex-direction:column}
 .sidebar-nav-label{font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:8px 8px 4px}
 .nav-pill{font-size:13px;font-family:var(--font);padding:8px 10px;border-radius:8px;border:none;background:transparent;color:rgba(255,255,255,0.55);cursor:pointer;text-align:left;width:100%;transition:all 0.12s;display:flex;align-items:center;justify-content:space-between;gap:6px;white-space:nowrap}
 .nav-pill:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9)}
@@ -709,42 +709,42 @@ function renderSidebar() {
   }
 
   // Deal health — only when in an opp AND health score is meaningful (>0)
-  const sidebar = document.querySelector('.sidebar');
-  let healthEl = document.getElementById('sidebarHealth');
-  if (!healthEl) {
-    const div = document.createElement('div');
-    div.id = 'sidebarHealth';
-    div.className = 'sidebar-health';
-    sidebar.appendChild(div);
-    healthEl = div;
-  }
+  // Render inline in nav (above the pipeline divider)
+  const healthDiv = document.createElement('div');
+  healthDiv.id = 'sidebarHealthInline';
   if (!showDashboard && !showPipeline) {
     const hs = calcHealthScore();
     if (hs > 0) {
       const hsColor = hs >= 70 ? '#5DCAA5' : hs >= 40 ? '#EF9F27' : '#f09595';
-      healthEl.innerHTML = `
+      healthDiv.className = 'sidebar-health';
+      healthDiv.innerHTML = `
         <div><div class="sidebar-health-label">Deal health</div></div>
         <div class="sidebar-health-score" style="color:${hsColor}">${hs}</div>
         ${healthRingSVG(hs, 28, 3)}`;
-    } else {
-      healthEl.innerHTML = '';
     }
-  } else {
-    healthEl.innerHTML = '';
   }
+  nav.appendChild(healthDiv);
 
-  // PIPELINE pill — pinned at bottom, same style as OVERVIEW
-  let pipelineBtn = document.getElementById('pipelineNavBtn');
-  if (!pipelineBtn) {
-    pipelineBtn = document.createElement('button');
-    pipelineBtn.id = 'pipelineNavBtn';
-    sidebar.appendChild(pipelineBtn);
-  }
+  // PIPELINE pill — inside nav, pushed to bottom with margin-top:auto spacer
+  const pipelineSpacer = document.createElement('div');
+  pipelineSpacer.style.cssText = 'flex:1';
+  nav.appendChild(pipelineSpacer);
+
+  const pipelineDivider = document.createElement('div');
+  pipelineDivider.style.cssText = 'height:0.5px;background:rgba(255,255,255,0.08);margin:0 0 14px';
+  nav.appendChild(pipelineDivider);
+
+  const pipelineBtn = document.createElement('button');
   pipelineBtn.className = 'nav-pill' + (showPipeline ? ' active' : '');
-  pipelineBtn.style.cssText = topPillStyle + ';border-top:0.5px solid rgba(255,255,255,0.08);border-radius:0 0 0 0;padding-top:12px;margin-top:auto;border-radius:8px';
+  pipelineBtn.style.cssText = topPillStyle + ';margin-bottom:22px';
   const logCount = getLog().length;
   pipelineBtn.innerHTML = `PIPELINE${logCount > 0 ? ` <span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);border-radius:10px;padding:1px 7px;margin-left:4px;letter-spacing:0">${logCount}</span>` : ''}`;
   pipelineBtn.onclick = () => { showPipeline = true; showDashboard = false; render(); };
+  nav.appendChild(pipelineBtn);
+
+  // Remove any old standalone pipeline button appended to sidebar
+  const old = document.getElementById('pipelineNavBtn');
+  if (old) old.remove();
 }
 
 function isSlideFilled(id) {
