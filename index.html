@@ -25,7 +25,7 @@
   --border-info:#185fa5;--border-success:#3b6d11;--border-warning:#854f0b;--border-danger:#a32d2d;
   --green-pip:#5DCAA5;--amber-pip:#FAC775;
 }}
-body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-primary);min-height:100vh}
+body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column}
 
 /* ── Forecast badges ── */
 .forecast-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
@@ -35,7 +35,7 @@ body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-pri
 .fc-omit{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
 
 /* ── App shell ── */
-.app-shell{display:flex;min-height:100vh}
+.app-shell{display:flex;flex:1;min-height:0}
 
 /* ── Sidebar ── */
 .sidebar{
@@ -193,28 +193,7 @@ select.field-input{cursor:pointer}
 .action-btn:hover{background:var(--bg-tertiary)}
 .action-btn.primary{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary)}
 .action-btn.primary:hover{opacity:0.85}
-@media(max-width:700px){
-  .field-grid,.pov-grid{grid-template-columns:1fr}
-  .field-grid-3{grid-template-columns:1fr 1fr}
-  .medd-score-bar{grid-template-columns:repeat(2,1fr)}
-  .log-summary{grid-template-columns:repeat(2,1fr)}
-  .opp-cards{grid-template-columns:1fr}
-  .waterfall-bars{grid-template-columns:repeat(2,1fr)}
-  .pov-grid{grid-template-columns:1fr}
-
-  /* Hide desktop sidebar */
-  .app-shell{flex-direction:column}
-  .sidebar{display:none}
-
-  /* Show mobile top bar */
-  .mobile-topbar{display:flex}
-
-  .content-area{padding:14px 14px 80px}
-  .bottom-bar{flex-wrap:wrap}
-  .stk-grid{grid-template-columns:1fr}
-}
-
-/* ── Mobile top bar ── */
+/* ── Mobile top bar (hidden by default, shown on mobile) ── */
 .mobile-topbar{
   display:none;
   background:#1a2332;
@@ -242,10 +221,27 @@ select.field-input{cursor:pointer}
   border-radius:2px;transition:all 0.2s;
 }
 
-/* ── Sidebar drawer overlay ── */
+/* ── Sidebar drawer overlay (shown via JS only) ── */
 .sidebar-drawer{
   display:none;
   position:fixed;inset:0;z-index:200;
+}
+
+/* ── Mobile breakpoint ── */
+@media(max-width:700px){
+  .field-grid,.pov-grid{grid-template-columns:1fr}
+  .field-grid-3{grid-template-columns:1fr 1fr}
+  .medd-score-bar{grid-template-columns:repeat(2,1fr)}
+  .log-summary{grid-template-columns:repeat(2,1fr)}
+  .opp-cards{grid-template-columns:1fr}
+  .waterfall-bars{grid-template-columns:repeat(2,1fr)}
+  .pov-grid{grid-template-columns:1fr}
+  .app-shell{flex-direction:column}
+  .sidebar{display:none !important}
+  .mobile-topbar{display:flex !important}
+  .content-area{padding:14px 14px 80px}
+  .bottom-bar{flex-wrap:wrap}
+  .stk-grid{grid-template-columns:1fr}
 }
 .drawer-backdrop{
   position:absolute;inset:0;
