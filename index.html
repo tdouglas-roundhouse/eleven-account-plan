@@ -27,38 +27,49 @@
 }}
 body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-primary);min-height:100vh}
 
-/* ── Header ── */
-.page-header{background:var(--bg-primary);border-bottom:0.5px solid var(--border-light);padding:14px 24px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.page-header-left h1{font-size:16px;font-weight:600;letter-spacing:-0.01em}
-.page-header-left p{font-size:11px;color:var(--text-tertiary);margin-top:1px}
-.header-score{display:flex;gap:8px;align-items:center;flex-shrink:0}
-.header-score .sc{font-size:12px;color:var(--text-secondary)}
+/* ── Forecast badges ── */
 .forecast-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
 .fc-commit{background:var(--bg-success);color:var(--text-success);border:0.5px solid var(--border-success)}
 .fc-upside{background:var(--bg-info);color:var(--text-info);border:0.5px solid var(--border-info)}
 .fc-pipeline{background:var(--bg-warning);color:var(--text-warning);border:0.5px solid var(--border-warning)}
 .fc-omit{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
 
-/* ── Opportunity selector bar ── */
-.opp-bar{display:flex;gap:6px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
-.opp-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;transition:all 0.15s}
-.opp-btn:hover{background:var(--bg-tertiary)}
-.opp-btn.active{background:var(--bg-info);color:var(--text-info);border-color:var(--border-info);font-weight:500}
-.add-opp-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px dashed var(--border-mid);background:transparent;color:var(--text-tertiary);cursor:pointer}
-.add-opp-btn:hover{color:var(--text-secondary);border-color:var(--border-strong)}
+/* ── App shell ── */
+.app-shell{display:flex;min-height:100vh}
 
-/* ── App shell: sidebar + content ── */
-.app-shell{display:flex;gap:0;min-height:calc(100vh - 56px)}
-.sidebar{width:168px;flex-shrink:0;padding:20px 12px 40px;display:flex;flex-direction:column;gap:4px;border-right:0.5px solid var(--border-light);background:var(--bg-primary);position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
-.sidebar-label{font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-tertiary);padding:8px 8px 4px;margin-top:4px}
-.sidebar-label:first-child{margin-top:0;padding-top:0}
-.nav-pill{font-size:13px;font-family:var(--font);padding:7px 12px;border-radius:20px;border:0.5px solid transparent;background:transparent;color:var(--text-secondary);cursor:pointer;text-align:left;width:100%;transition:all 0.12s;display:flex;align-items:center;justify-content:space-between;gap:6px;line-height:1.3}
-.nav-pill:hover{background:var(--bg-secondary);color:var(--text-primary)}
-.nav-pill.active{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary);font-weight:500}
-.nav-pill.active .nav-pip{background:var(--bg-primary);opacity:0.5}
-.nav-pip{width:6px;height:6px;border-radius:50%;background:var(--green-pip);flex-shrink:0;opacity:0}
+/* ── Sidebar ── */
+.sidebar{
+  width:210px;flex-shrink:0;
+  background:#1a2332;
+  display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.sidebar-brand{padding:22px 18px 16px;border-bottom:0.5px solid rgba(255,255,255,0.08)}
+.sidebar-brand h1{font-size:14px;font-weight:600;color:#ffffff;letter-spacing:-0.01em;line-height:1.3}
+.sidebar-brand p{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px}
+.sidebar-score{display:flex;align-items:center;gap:7px;margin-top:8px}
+.sidebar-score .sc{font-size:12px;color:rgba(255,255,255,0.55)}
+.save-indicator{font-size:11px;color:#5DCAA5;opacity:0;transition:opacity 0.4s;white-space:nowrap;margin-left:auto}
+.save-indicator.show{opacity:1}
+
+.sidebar-opp{padding:12px 14px 0}
+.opp-bar{display:flex;flex-direction:column;gap:4px}
+.opp-btn{font-size:12px;font-family:var(--font);padding:5px 10px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.55);cursor:pointer;transition:all 0.15s;text-align:left;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opp-btn:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.85)}
+.opp-btn.active{background:rgba(255,255,255,0.14);color:#ffffff;border-color:rgba(255,255,255,0.25);font-weight:500}
+.add-opp-btn{font-size:12px;font-family:var(--font);padding:5px 10px;border-radius:6px;border:0.5px dashed rgba(255,255,255,0.18);background:transparent;color:rgba(255,255,255,0.35);cursor:pointer;text-align:left;width:100%;margin-top:2px}
+.add-opp-btn:hover{color:rgba(255,255,255,0.65);border-color:rgba(255,255,255,0.35)}
+
+.sidebar-nav{padding:14px 14px 0;flex:1}
+.sidebar-nav-label{font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:8px 8px 4px}
+.nav-pill{font-size:13px;font-family:var(--font);padding:8px 10px;border-radius:8px;border:none;background:transparent;color:rgba(255,255,255,0.55);cursor:pointer;text-align:left;width:100%;transition:all 0.12s;display:flex;align-items:center;justify-content:space-between;gap:6px;white-space:nowrap}
+.nav-pill:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9)}
+.nav-pill.active{background:rgba(255,255,255,0.15);color:#ffffff;font-weight:500}
+.nav-pip{width:6px;height:6px;border-radius:50%;background:#5DCAA5;flex-shrink:0;opacity:0}
 .nav-pip.filled{opacity:1}
-.content-area{flex:1;padding:24px 28px 60px;min-width:0}
+
+/* ── Content area ── */
+.content-area{flex:1;padding:24px 28px 0;min-width:0;display:flex;flex-direction:column}
 
 /* ── Slides ── */
 .slide{display:none;background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:22px 24px 24px}
@@ -175,13 +186,31 @@ select.field-input{cursor:pointer}
 .prog-nav button{font-size:12px;font-family:var(--font);padding:4px 12px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer}
 .prog-nav button:hover{background:var(--bg-tertiary)}
 .prog-nav button:disabled{opacity:0.35;cursor:default}
-.main-wrap{max-width:1100px;margin:0 auto;padding:20px 24px 0}
-.bottom-bar{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;padding-bottom:40px}
+.main-wrap{flex:1;display:flex;flex-direction:column}
+.bottom-bar{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;padding:0 0 32px}
 .action-btn{font-size:13px;font-family:var(--font);padding:8px 16px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;font-weight:500;transition:background 0.12s}
 .action-btn:hover{background:var(--bg-tertiary)}
 .action-btn.primary{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary)}
 .action-btn.primary:hover{opacity:0.85}
-/* Call analysis */
+@media(max-width:700px){
+  .field-grid,.pov-grid{grid-template-columns:1fr}
+  .field-grid-3{grid-template-columns:1fr 1fr}
+  .app-shell{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static;flex-direction:column}
+  .sidebar-brand{padding:16px 14px 12px}
+  .sidebar-opp,.sidebar-nav{padding:10px 12px 0}
+  .opp-bar{flex-direction:row;flex-wrap:wrap}
+  .opp-btn,.add-opp-btn{width:auto}
+  .nav-pill{white-space:nowrap;width:auto;display:inline-flex}
+  .sidebar-nav{display:flex;flex-wrap:wrap;gap:4px;padding-bottom:10px}
+  .sidebar-nav-label{display:none}
+  .nav-pip{display:none}
+  .content-area{padding:16px 14px 0}
+  .medd-score-bar{grid-template-columns:repeat(2,1fr)}
+  .log-summary{grid-template-columns:repeat(2,1fr)}
+  .log-overlay{padding:0}
+  .log-panel{max-height:100vh;border-radius:0}
+}
 .call-log{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
 .call-entry{background:var(--bg-secondary);border:0.5px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden}
 .call-entry-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none}
@@ -263,10 +292,8 @@ select.field-input{cursor:pointer}
 @media(max-width:600px){
   .field-grid,.pov-grid{grid-template-columns:1fr}
   .field-grid-3{grid-template-columns:1fr 1fr}
-  .page-header{padding:12px 14px}
   .app-shell{flex-direction:column}
   .sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:0.5px solid var(--border-light);padding:10px 12px;flex-direction:row;flex-wrap:wrap;gap:4px}
-  .sidebar-label{display:none}
   .nav-pill{width:auto;padding:5px 12px;font-size:12px}
   .nav-pip{display:none}
   .content-area{padding:16px 14px 40px}
@@ -278,16 +305,40 @@ select.field-input{cursor:pointer}
 </style>
 </head>
 <body>
-<div class="page-header">
-  <div class="page-header-left">
-    <h1>Eleven Systems — Opportunity Plan</h1>
-    <p>Unified opportunity plan + MEDDPICC qualifier</p>
-  </div>
-  <div class="header-score" id="headerScore">
-    <span class="save-indicator" id="saveIndicator">&#10003; Saved</span>
+<div class="app-shell">
+  <!-- Dark navy sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <h1>Eleven Systems</h1>
+      <p>Opportunity Plan</p>
+      <div class="sidebar-score" id="headerScore">
+        <span class="save-indicator" id="saveIndicator">&#10003; Saved</span>
+      </div>
+    </div>
+    <div class="sidebar-opp">
+      <div class="opp-bar" id="oppBar"></div>
+    </div>
+    <div class="sidebar-nav" id="sidebarNav"></div>
+  </nav>
+
+  <!-- Content -->
+  <div class="main-wrap">
+    <div class="content-area">
+      <div id="slidesContainer"></div>
+      <div class="bottom-bar">
+        <button class="action-btn" onclick="saveToLog()">Save to log</button>
+        <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
+        <div style="margin-left:auto">
+          <button class="log-open-btn" onclick="openLog()">
+            Pipeline log <span class="log-count" id="logCount">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
+<!-- Log overlay -->
 <div class="log-overlay" id="logOverlay" onclick="closeLogOnBg(event)">
   <div class="log-panel">
     <div class="log-header">
@@ -309,26 +360,6 @@ select.field-input{cursor:pointer}
         <tbody id="logTableBody"></tbody>
       </table>
       <div class="log-empty" id="logEmpty" style="display:none">No saved opportunities yet. Hit "Save to log" on any plan.</div>
-    </div>
-  </div>
-</div>
-
-<div class="main-wrap">
-  <div class="opp-bar" id="oppBar"></div>
-  <div class="app-shell">
-    <nav class="sidebar" id="sidebarNav"></nav>
-    <div class="content-area">
-      <div id="slidesContainer"></div>
-      <div class="bottom-bar">
-        <button class="action-btn" onclick="addOpp()">+ Add opportunity</button>
-        <button class="action-btn" onclick="saveToLog()">Save to log</button>
-        <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
-        <div style="margin-left:auto">
-          <button class="log-open-btn" onclick="openLog()">
-            Pipeline log <span class="log-count" id="logCount">0</span>
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -566,7 +597,9 @@ function renderHeaderScore() {
   const el = document.getElementById('headerScore');
   const { yes, total } = calcScore();
   const fc = calcForecast();
+  const saveEl = document.getElementById('saveIndicator');
   el.innerHTML = `<span class="sc">${yes}/${total}</span><span class="forecast-badge ${FC_CLASS[fc]}">${fc}</span>`;
+  if (saveEl) el.appendChild(saveEl);
 }
 
 function renderOppBar() {
@@ -576,6 +609,7 @@ function renderOppBar() {
     const btn = document.createElement('button');
     btn.className = 'opp-btn' + (i === currentOpp ? ' active' : '');
     btn.textContent = a.name;
+    btn.title = a.name;
     btn.onclick = () => switchOpp(i);
     btn.ondblclick = () => { const n = prompt('Rename:', a.name); if (n && n.trim()) { opps[i].name = n.trim(); renderOppBar(); } };
     bar.appendChild(btn);
