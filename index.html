@@ -198,9 +198,9 @@ select.field-input{cursor:pointer}
 .log-empty{padding:40px 0;text-align:center;color:var(--text-tertiary);font-size:13px}
 .save-indicator{font-size:11px;color:var(--text-success);opacity:0;transition:opacity 0.4s;white-space:nowrap}
 .save-indicator.show{opacity:1}
-.log-open-btn{font-size:12px;font-family:var(--font);padding:5px 12px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;gap:5px}
-.log-open-btn:hover{background:var(--bg-tertiary)}
-.log-open-btn .log-count{font-size:10px;font-weight:600;background:var(--text-primary);color:var(--bg-primary);border-radius:10px;padding:1px 5px;min-width:16px;text-align:center}
+.log-open-btn{font-size:13px;font-family:var(--font);padding:8px 16px;border-radius:var(--radius-md);border:0.5px solid var(--border-success);background:var(--bg-success);color:var(--text-success);cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500;transition:opacity 0.12s}
+.log-open-btn:hover{opacity:0.82}
+.log-open-btn .log-count{font-size:10px;font-weight:600;background:var(--text-success);color:var(--bg-success);border-radius:10px;padding:1px 6px;min-width:18px;text-align:center}
 @media(max-width:540px){
   .field-grid,.pov-grid{grid-template-columns:1fr}
   .field-grid-3{grid-template-columns:1fr 1fr}
@@ -219,10 +219,8 @@ select.field-input{cursor:pointer}
     <h1>Eleven Systems — Opportunity Plan</h1>
     <p>Unified opportunity plan + MEDDPICC qualifier</p>
   </div>
-  <div class="header-score" id="headerScore"></div>
-  <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+  <div class="header-score" id="headerScore">
     <span class="save-indicator" id="saveIndicator">&#10003; Saved</span>
-    <button class="log-open-btn" onclick="openLog()">Pipeline log <span class="log-count" id="logCount">0</span></button>
   </div>
 </div>
 
@@ -260,6 +258,11 @@ select.field-input{cursor:pointer}
     <button class="action-btn" onclick="addOpp()">+ Add opportunity</button>
     <button class="action-btn" onclick="saveToLog()">Save to log</button>
     <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
+    <div style="margin-left:auto">
+      <button class="log-open-btn" onclick="openLog()">
+        Pipeline log <span class="log-count" id="logCount">0</span>
+      </button>
+    </div>
   </div>
 </div>
 
