@@ -892,8 +892,6 @@ function oppForecast(a) {
 
 function buildDashboard() {
   if (opps.length === 0) return buildOnboarding();
-  const realOpps = opps.filter(a => a.data.snapshot.firmName || a.data.stakeholders.length || (a.data.meddpicc && Object.keys(a.data.meddpicc.meddAnswers || {}).length));
-  if (realOpps.length === 0) return buildOnboarding();
 
   // Waterfall data
   const buckets = { Commit: { arr: 0, count: 0 }, Upside: { arr: 0, count: 0 }, Pipeline: { arr: 0, count: 0 }, Omit: { arr: 0, count: 0 } };
