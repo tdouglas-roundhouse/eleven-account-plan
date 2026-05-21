@@ -26,9 +26,11 @@
   --green-pip:#5DCAA5;--amber-pip:#FAC775;
 }}
 body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-primary);min-height:100vh}
-.page-header{background:var(--bg-primary);border-bottom:0.5px solid var(--border-light);padding:18px 32px 14px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.page-header-left h1{font-size:17px;font-weight:600;letter-spacing:-0.01em}
-.page-header-left p{font-size:12px;color:var(--text-tertiary);margin-top:2px}
+
+/* ── Header ── */
+.page-header{background:var(--bg-primary);border-bottom:0.5px solid var(--border-light);padding:14px 24px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.page-header-left h1{font-size:16px;font-weight:600;letter-spacing:-0.01em}
+.page-header-left p{font-size:11px;color:var(--text-tertiary);margin-top:1px}
 .header-score{display:flex;gap:8px;align-items:center;flex-shrink:0}
 .header-score .sc{font-size:12px;color:var(--text-secondary)}
 .forecast-badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
@@ -36,20 +38,31 @@ body{font-family:var(--font);background:var(--bg-secondary);color:var(--text-pri
 .fc-upside{background:var(--bg-info);color:var(--text-info);border:0.5px solid var(--border-info)}
 .fc-pipeline{background:var(--bg-warning);color:var(--text-warning);border:0.5px solid var(--border-warning)}
 .fc-omit{background:var(--bg-danger);color:var(--text-danger);border:0.5px solid var(--border-danger)}
-.main{max-width:760px;margin:0 auto;padding:20px 24px 60px}
+
+/* ── Opportunity selector bar ── */
 .opp-bar{display:flex;gap:6px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
 .opp-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;transition:all 0.15s}
 .opp-btn:hover{background:var(--bg-tertiary)}
 .opp-btn.active{background:var(--bg-info);color:var(--text-info);border-color:var(--border-info);font-weight:500}
 .add-opp-btn{font-size:13px;font-family:var(--font);padding:6px 14px;border-radius:20px;border:0.5px dashed var(--border-mid);background:transparent;color:var(--text-tertiary);cursor:pointer}
 .add-opp-btn:hover{color:var(--text-secondary);border-color:var(--border-strong)}
-.slide-nav{display:flex;gap:4px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
-.slide-tab{font-size:12px;font-family:var(--font);padding:5px 12px;border-radius:20px;border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;white-space:nowrap;transition:all 0.12s}
-.slide-tab:hover{background:var(--bg-tertiary)}
-.slide-tab.active{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary)}
+
+/* ── App shell: sidebar + content ── */
+.app-shell{display:flex;gap:0;min-height:calc(100vh - 56px)}
+.sidebar{width:168px;flex-shrink:0;padding:20px 12px 40px;display:flex;flex-direction:column;gap:4px;border-right:0.5px solid var(--border-light);background:var(--bg-primary);position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.sidebar-label{font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-tertiary);padding:8px 8px 4px;margin-top:4px}
+.sidebar-label:first-child{margin-top:0;padding-top:0}
+.nav-pill{font-size:13px;font-family:var(--font);padding:7px 12px;border-radius:20px;border:0.5px solid transparent;background:transparent;color:var(--text-secondary);cursor:pointer;text-align:left;width:100%;transition:all 0.12s;display:flex;align-items:center;justify-content:space-between;gap:6px;line-height:1.3}
+.nav-pill:hover{background:var(--bg-secondary);color:var(--text-primary)}
+.nav-pill.active{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary);font-weight:500}
+.nav-pill.active .nav-pip{background:var(--bg-primary);opacity:0.5}
+.nav-pip{width:6px;height:6px;border-radius:50%;background:var(--green-pip);flex-shrink:0;opacity:0}
+.nav-pip.filled{opacity:1}
+.content-area{flex:1;padding:24px 28px 60px;min-width:0}
+
+/* ── Slides ── */
 .slide{display:none;background:var(--bg-primary);border:0.5px solid var(--border-light);border-radius:var(--radius-lg);padding:22px 24px 24px}
 .slide.visible{display:block}
-.slide-label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:5px}
 .slide-title{font-size:18px;font-weight:600;letter-spacing:-0.01em;margin-bottom:16px}
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .field-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
@@ -162,7 +175,8 @@ select.field-input{cursor:pointer}
 .prog-nav button{font-size:12px;font-family:var(--font);padding:4px 12px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer}
 .prog-nav button:hover{background:var(--bg-tertiary)}
 .prog-nav button:disabled{opacity:0.35;cursor:default}
-.bottom-bar{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+.main-wrap{max-width:1100px;margin:0 auto;padding:20px 24px 0}
+.bottom-bar{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;padding-bottom:40px}
 .action-btn{font-size:13px;font-family:var(--font);padding:8px 16px;border-radius:var(--radius-md);border:0.5px solid var(--border-mid);background:var(--bg-primary);color:var(--text-primary);cursor:pointer;font-weight:500;transition:background 0.12s}
 .action-btn:hover{background:var(--bg-tertiary)}
 .action-btn.primary{background:var(--text-primary);color:var(--bg-primary);border-color:var(--text-primary)}
@@ -246,11 +260,16 @@ select.field-input{cursor:pointer}
 .log-open-btn{font-size:13px;font-family:var(--font);padding:8px 16px;border-radius:var(--radius-md);border:0.5px solid var(--border-success);background:var(--bg-success);color:var(--text-success);cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500;transition:opacity 0.12s}
 .log-open-btn:hover{opacity:0.82}
 .log-open-btn .log-count{font-size:10px;font-weight:600;background:var(--text-success);color:var(--bg-success);border-radius:10px;padding:1px 6px;min-width:18px;text-align:center}
-@media(max-width:540px){
+@media(max-width:600px){
   .field-grid,.pov-grid{grid-template-columns:1fr}
   .field-grid-3{grid-template-columns:1fr 1fr}
-  .page-header{padding:14px 16px 10px}
-  .main{padding:14px 12px 40px}
+  .page-header{padding:12px 14px}
+  .app-shell{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:0.5px solid var(--border-light);padding:10px 12px;flex-direction:row;flex-wrap:wrap;gap:4px}
+  .sidebar-label{display:none}
+  .nav-pill{width:auto;padding:5px 12px;font-size:12px}
+  .nav-pip{display:none}
+  .content-area{padding:16px 14px 40px}
   .medd-score-bar{grid-template-columns:repeat(2,1fr)}
   .log-summary{grid-template-columns:repeat(2,1fr)}
   .log-overlay{padding:0}
@@ -294,19 +313,22 @@ select.field-input{cursor:pointer}
   </div>
 </div>
 
-<div class="main">
+<div class="main-wrap">
   <div class="opp-bar" id="oppBar"></div>
-  <div class="slide-nav" id="slideNav"></div>
-  <div class="slide-progress" id="slideProgress"></div>
-  <div id="slidesContainer"></div>
-  <div class="bottom-bar">
-    <button class="action-btn" onclick="addOpp()">+ Add opportunity</button>
-    <button class="action-btn" onclick="saveToLog()">Save to log</button>
-    <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
-    <div style="margin-left:auto">
-      <button class="log-open-btn" onclick="openLog()">
-        Pipeline log <span class="log-count" id="logCount">0</span>
-      </button>
+  <div class="app-shell">
+    <nav class="sidebar" id="sidebarNav"></nav>
+    <div class="content-area">
+      <div id="slidesContainer"></div>
+      <div class="bottom-bar">
+        <button class="action-btn" onclick="addOpp()">+ Add opportunity</button>
+        <button class="action-btn" onclick="saveToLog()">Save to log</button>
+        <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
+        <div style="margin-left:auto">
+          <button class="log-open-btn" onclick="openLog()">
+            Pipeline log <span class="log-count" id="logCount">0</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -388,7 +410,7 @@ function attachFormatters() {
   ['snapshot.currentArr', 'snapshot.targetArr'].forEach(path => {
     attachFormatter(document.querySelector(`[data-f="${path}"]`), 'currency');
   });
-  ['snapshot.renewalQ', 'pov.obj1date', 'pov.obj2date', 'pov.obj3date'].forEach(path => {
+  ['snapshot.renewalQ', 'accountpov.obj1date', 'accountpov.obj2date', 'accountpov.obj3date'].forEach(path => {
     attachFormatter(document.querySelector(`[data-f="${path}"]`), 'quarter');
   });
 }
@@ -398,12 +420,13 @@ function attachFormatters() {
    ================================================================ */
 
 const SLIDES = [
-  { id: 'snapshot',     label: 'Section 1', title: 'Account snapshot',        icon: '📊' },
-  { id: 'stakeholders', label: 'Section 2', title: 'Stakeholder map',          icon: '🗺' },
-  { id: 'pov',          label: 'Section 3', title: 'Account POV',              icon: '💡' },
-  { id: 'opportunity',  label: 'Section 4', title: 'Opportunity & MEDDPICC',   icon: '🎯' },
-  { id: 'map',          label: 'Section 5', title: 'Mutual action plan',       icon: '📋' },
-  { id: 'calls',        label: 'Section 6', title: 'Call analysis',            icon: '🎙' }
+  { id: 'snapshot',     title: 'Account Snapshot'   },
+  { id: 'stakeholders', title: 'Stakeholder Map'     },
+  { id: 'accountpov',   title: 'Account POV'         },
+  { id: 'opppov',       title: 'Opportunity POV'     },
+  { id: 'meddpicc',     title: 'MEDDPICC'            },
+  { id: 'map',          title: 'Mutual Action Plan'  },
+  { id: 'calls',        title: 'Call Analysis'       }
 ];
 
 const MEDD = [
@@ -476,12 +499,13 @@ const AUM_RANGES = ['<$100M', '$100M–$500M', '$500M–$1B', '$1B–$5B', '$5B�
 
 function freshData() {
   return {
-    snapshot: { firmName: '', firmType: '', aum: '', contactCount: '', healthStatus: '', journey: '', currentArr: '', targetArr: '', renewalQ: '', notes: '', stakeholderGaps: '' },
+    snapshot:     { firmName: '', firmType: '', aum: '', contactCount: '', healthStatus: '', journey: '', currentArr: '', targetArr: '', renewalQ: '', notes: '', stakeholderGaps: '' },
     stakeholders: [],
-    pov: { whyChange: '', whyNow: '', whyUs: '', whatSolution: '', objective1: '', obj1date: '', objective2: '', obj2date: '', objective3: '', obj3date: '' },
-    opportunity: { whitespace: '', competitive: '', incumbents: '', competitiveStrategy: '', meddAnswers: {}, meddNotes: {}, gapOverrides: { __manual: [] } },
-    map: { rows: [], topAsk: '', lastEngagement: '', nextTouch: '' },
-    calls: []
+    accountpov:   { whyChange: '', whyNow: '', whyUs: '', whatSolution: '', objective1: '', obj1date: '', objective2: '', obj2date: '', objective3: '', obj3date: '' },
+    opppov:       { whitespace: '', incumbents: '', competitiveStrategy: '', competitive: '' },
+    meddpicc:     { meddAnswers: {}, meddNotes: {}, gapOverrides: { __manual: [] } },
+    map:          { rows: [], topAsk: '', lastEngagement: '', nextTouch: '' },
+    calls:        []
   };
 }
 
@@ -496,7 +520,7 @@ function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;'
    ================================================================ */
 
 function meddYes(id, count) {
-  const a = d().opportunity.meddAnswers;
+  const a = (d().meddpicc && d().meddpicc.meddAnswers) || {};
   let y = 0;
   for (let i = 0; i < count; i++) if (a[id + '_' + i] === 'yes') y++;
   return y;
@@ -508,12 +532,13 @@ function meddStatus(id, count) {
   return 'low';
 }
 function calcScore() {
+  const a = (d().meddpicc && d().meddpicc.meddAnswers) || {};
   let yes = 0, total = 0;
-  MEDD.forEach(s => s.questions.forEach((_, i) => { total++; if (d().opportunity.meddAnswers[s.id + '_' + i] === 'yes') yes++; }));
+  MEDD.forEach(s => s.questions.forEach((_, i) => { total++; if (a[s.id + '_' + i] === 'yes') yes++; }));
   return { yes, total };
 }
 function calcForecast() {
-  const a = d().opportunity.meddAnswers;
+  const a = (d().meddpicc && d().meddpicc.meddAnswers) || {};
   const bl = MEDD.filter(s => s.blocker);
   let bY = 0, bT = 0, tY = 0, tQ = 0;
   bl.forEach(s => s.questions.forEach((_, i) => { bT++; if (a[s.id + '_' + i] === 'yes') bY++; }));
@@ -531,9 +556,8 @@ const FC_CLASS = { Commit: 'fc-commit', Upside: 'fc-upside', Pipeline: 'fc-pipel
    ================================================================ */
 
 function render() {
-  renderAcctBar();
-  renderSlideNav();
-  renderProgress();
+  renderOppBar();
+  renderSidebar();
   renderCurrentSlide();
   renderHeaderScore();
 }
@@ -545,7 +569,7 @@ function renderHeaderScore() {
   el.innerHTML = `<span class="sc">${yes}/${total}</span><span class="forecast-badge ${FC_CLASS[fc]}">${fc}</span>`;
 }
 
-function renderAcctBar() {
+function renderOppBar() {
   const bar = document.getElementById('oppBar');
   bar.innerHTML = '';
   opps.forEach((a, i) => {
@@ -553,7 +577,7 @@ function renderAcctBar() {
     btn.className = 'opp-btn' + (i === currentOpp ? ' active' : '');
     btn.textContent = a.name;
     btn.onclick = () => switchOpp(i);
-    btn.ondblclick = () => { const n = prompt('Rename:', a.name); if (n && n.trim()) { opps[i].name = n.trim(); renderAcctBar(); } };
+    btn.ondblclick = () => { const n = prompt('Rename:', a.name); if (n && n.trim()) { opps[i].name = n.trim(); renderOppBar(); } };
     bar.appendChild(btn);
   });
   const add = document.createElement('button');
@@ -563,50 +587,29 @@ function renderAcctBar() {
   bar.appendChild(add);
 }
 
-function renderSlideNav() {
-  const nav = document.getElementById('slideNav');
+function renderSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  if (!nav) return;
   nav.innerHTML = '';
   SLIDES.forEach((s, i) => {
     const btn = document.createElement('button');
-    btn.className = 'slide-tab' + (i === opp().currentSlide ? ' active' : '');
-    btn.textContent = s.icon + ' ' + s.title;
+    const filled = isSlideFilled(s.id);
+    const isActive = i === opp().currentSlide;
+    btn.className = 'nav-pill' + (isActive ? ' active' : '');
+    btn.innerHTML = s.title + `<span class="nav-pip${filled ? ' filled' : ''}"></span>`;
     btn.onclick = () => { opp().currentSlide = i; render(); };
     nav.appendChild(btn);
   });
 }
 
-function renderProgress() {
-  const bar = document.getElementById('slideProgress');
-  bar.innerHTML = '';
-  SLIDES.forEach((s, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'prog-dot' + (i === opp().currentSlide ? ' active' : isSlideFilled(s.id) ? ' filled' : '');
-    dot.title = s.title;
-    dot.onclick = () => { opp().currentSlide = i; render(); };
-    bar.appendChild(dot);
-  });
-  const nav = document.createElement('div');
-  nav.className = 'prog-nav';
-  const prev = document.createElement('button');
-  prev.textContent = '← Prev';
-  prev.disabled = opp().currentSlide === 0;
-  prev.onclick = () => { if (opp().currentSlide > 0) { opp().currentSlide--; render(); } };
-  const next = document.createElement('button');
-  next.textContent = 'Next →';
-  next.disabled = opp().currentSlide === SLIDES.length - 1;
-  next.onclick = () => { if (opp().currentSlide < SLIDES.length - 1) { opp().currentSlide++; render(); } };
-  nav.appendChild(prev);
-  nav.appendChild(next);
-  bar.appendChild(nav);
-}
-
 function isSlideFilled(id) {
-  if (id === 'snapshot') return !!(d().snapshot.firmName && d().snapshot.firmType && d().snapshot.healthStatus);
+  if (id === 'snapshot')     return !!(d().snapshot.firmName && d().snapshot.firmType && d().snapshot.healthStatus);
   if (id === 'stakeholders') return d().stakeholders.length > 0;
-  if (id === 'pov') return !!(d().pov.whyChange && d().pov.whyNow && d().pov.whyUs);
-  if (id === 'opportunity') return calcScore().yes > 0;
-  if (id === 'map') return d().map.rows.length > 0 && !!d().map.topAsk;
-  if (id === 'calls') return (d().calls || []).length > 0;
+  if (id === 'accountpov')   return !!(d().accountpov && d().accountpov.whyChange && d().accountpov.whyNow);
+  if (id === 'opppov')       return !!(d().opppov && d().opppov.whitespace);
+  if (id === 'meddpicc')     return calcScore().yes > 0;
+  if (id === 'map')          return d().map.rows.length > 0 && !!d().map.topAsk;
+  if (id === 'calls')        return (d().calls || []).length > 0;
   return false;
 }
 
@@ -629,17 +632,175 @@ function renderCurrentSlide() {
 function buildSlide(id) {
   if (id === 'snapshot')     return buildSnapshot();
   if (id === 'stakeholders') return buildStakeholders();
-  if (id === 'pov')          return buildPov();
-  if (id === 'opportunity')  return buildOpportunity();
+  if (id === 'accountpov')   return buildAccountPov();
+  if (id === 'opppov')       return buildOppPov();
+  if (id === 'meddpicc')     return buildMeddpiccSlide();
   if (id === 'map')          return buildMap();
   if (id === 'calls')        return buildCalls();
   return '';
 }
 
+function buildAccountPov() {
+  const p = d().accountpov || {};
+  return `<div class="slide-title">Account POV</div>
+<div class="pov-grid">
+  <div class="pov-card"><div class="pov-q">Why change?</div>
+    <textarea class="field-input" rows="3" data-f="accountpov.whyChange" placeholder="Cost of doing nothing? Pain today?">${esc(p.whyChange)}</textarea></div>
+  <div class="pov-card"><div class="pov-q">Why now?</div>
+    <textarea class="field-input" rows="3" data-f="accountpov.whyNow" placeholder="Trigger event, renewal window, exec pressure?">${esc(p.whyNow)}</textarea></div>
+  <div class="pov-card"><div class="pov-q">Why Eleven?</div>
+    <textarea class="field-input" rows="3" data-f="accountpov.whyUs" placeholder="Unique angle for this account specifically?">${esc(p.whyUs)}</textarea></div>
+  <div class="pov-card"><div class="pov-q">What solution / value?</div>
+    <textarea class="field-input" rows="3" data-f="accountpov.whatSolution" placeholder="Which modules? Quantified ROI?">${esc(p.whatSolution)}</textarea></div>
+</div>
+<div class="sec-div">12-month objectives</div>
+<table class="obj-table">
+  <thead><tr>
+    <th style="width:80px">Owner</th><th>Objective</th>
+    <th style="width:120px">Target <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;opacity:0.7">Q# YYYY</span></th>
+  </tr></thead>
+  <tbody>
+    <tr><td>AE</td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="accountpov.objective1" value="${esc(p.objective1)}" placeholder="e.g. Signed onboarding agreement"></td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="accountpov.obj1date" value="${esc(p.obj1date)}" placeholder="Q2 2025"></td>
+    </tr>
+    <tr><td>AE</td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="accountpov.objective2" value="${esc(p.objective2)}" placeholder="e.g. Principal demo completed"></td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="accountpov.obj2date" value="${esc(p.obj2date)}" placeholder="Q3 2025"></td>
+    </tr>
+    <tr><td>AE/CSM</td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="accountpov.objective3" value="${esc(p.objective3)}" placeholder="e.g. First data integration live"></td>
+      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="accountpov.obj3date" value="${esc(p.obj3date)}" placeholder="Q4 2025"></td>
+    </tr>
+  </tbody>
+</table>`;
+}
+
+function buildOppPov() {
+  const o = d().opppov || {};
+  return `<div class="slide-title">Opportunity POV</div>
+<div class="sec-div first">Whitespace & expansion</div>
+<div class="field-full">
+  <div class="field-label">Where is the opportunity? What modules, services, or expansions?</div>
+  <textarea class="field-input" rows="3" data-f="opppov.whitespace" placeholder="e.g. Core platform + reporting module; expansion to 2nd entity in Y2">${esc(o.whitespace)}</textarea>
+</div>
+<div class="sec-div">Competitive landscape</div>
+<div class="field-grid">
+  <div>
+    <div class="field-label">Real competition (name it)</div>
+    <textarea class="field-input" rows="3" data-f="opppov.incumbents" placeholder="e.g. Addepar + Excel; internal ops team">${esc(o.incumbents)}</textarea>
+  </div>
+  <div>
+    <div class="field-label">Our strategy</div>
+    <div class="chip-group" style="margin-top:4px">
+      ${['Direct', 'Flank', 'Divide & conquer', 'Defend'].map(v => `<button class="chip${o.competitiveStrategy === v ? ' sel-blue' : ''}" onclick="setDeep('opppov.competitiveStrategy','${v}');render()">${v}</button>`).join('')}
+    </div>
+    <textarea class="field-input" rows="2" style="margin-top:8px" data-f="opppov.competitive" placeholder="How do we win? Differentiated angle vs. the incumbent?">${esc(o.competitive)}</textarea>
+  </div>
+</div>`;
+}
+
+function buildMeddpiccSlide() {
+  const { yes, total } = calcScore();
+  const fc = calcForecast();
+  const blockerWeak = MEDD.filter(s => s.blocker && meddStatus(s.id, s.questions.length) === 'low').length;
+  return `<div class="slide-title">MEDDPICC</div>
+<div class="medd-score-bar">
+  <div class="medd-score-card"><div class="lbl">Score</div><div class="val">${yes}/${total}</div></div>
+  <div class="medd-score-card"><div class="lbl">Sections green</div><div class="val">${MEDD.filter(s => meddStatus(s.id, s.questions.length) === 'full').length}/7</div></div>
+  <div class="medd-score-card"><div class="lbl">Blockers weak</div><div class="val" style="color:${blockerWeak > 0 ? 'var(--text-danger)' : 'var(--text-success)'}">${blockerWeak > 0 ? blockerWeak + ' weak' : 'Clear'}</div></div>
+  <div class="medd-score-card"><div class="lbl">Forecast</div><div class="val" style="font-size:14px;padding-top:3px"><span class="forecast-badge ${FC_CLASS[fc]}">${fc}</span></div></div>
+</div>
+${MEDD.map(s => buildMeddSection(s)).join('')}
+<div class="sec-div">Opportunity gaps & actions to close</div>
+<div style="font-size:11px;color:var(--text-tertiary);margin-bottom:8px">Blocker sections below 50% surface automatically.</div>
+${buildGapsTable()}
+<button class="gaps-add-btn" onclick="addGapRow()">+ Add gap manually</button>`;
+}
+
+function buildMeddSection(s) {
+  const isOpen = opp().openMedd.has(s.id);
+  const a = (d().meddpicc && d().meddpicc.meddAnswers) || {};
+  const notes = (d().meddpicc && d().meddpicc.meddNotes) || {};
+  const yes = meddYes(s.id, s.questions.length);
+  const total = s.questions.length;
+  const status = meddStatus(s.id, total);
+  const pips = Array.from({ length: total }, (_, i) => `<span class="pip ${i < yes ? (status === 'full' ? 'filled' : 'partial') : ''}"></span>`).join('');
+  let body = '';
+  if (isOpen) {
+    body = '<div class="medd-body">';
+    s.questions.forEach((q, i) => {
+      const key = s.id + '_' + i;
+      const val = a[key] || '';
+      body += `<div class="medd-question">
+  <div><div class="q-text">${q.text}</div><div class="q-tag">${q.tag}</div></div>
+  <div class="tog-group">
+    <button class="tog ${val === 'yes' ? 'yes' : ''}" onclick="setMeddAnswer('${s.id}',${i},'yes')">Yes</button>
+    <button class="tog ${val === 'no' ? 'no' : ''}" onclick="setMeddAnswer('${s.id}',${i},'no')">No</button>
+  </div>
+</div>`;
+    });
+    body += `<div class="medd-notes"><textarea rows="2" placeholder="Notes for ${s.title.toLowerCase()}…" onchange="setMeddNote('${s.id}',this.value)">${esc(notes[s.id] || '')}</textarea></div>`;
+    body += '</div>';
+  }
+  return `<div class="medd-section">
+  <div class="medd-section-header" onclick="toggleMedd('${s.id}')">
+    <div class="medd-left">
+      <div class="medd-icon"><svg viewBox="0 0 24 24">${s.icon}</svg></div>
+      <div>
+        <div class="medd-title-row">
+          <span class="medd-title">${s.title}</span>
+          ${s.blocker ? '<span class="blocker-tag">blocker</span>' : ''}
+        </div>
+        <div class="pip-row">${pips}</div>
+        <div class="medd-desc">${s.desc}</div>
+      </div>
+    </div>
+    <svg class="chevron ${isOpen ? 'open' : ''}" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  ${body}
+</div>`;
+}
+
+function buildGapsTable() {
+  const ma = (d().meddpicc && d().meddpicc.meddAnswers) || {};
+  const ov = (d().meddpicc && d().meddpicc.gapOverrides) || {};
+  const manual = (ov.__manual || []);
+  const autoRows = MEDD.filter(s => s.blocker && meddYes(s.id, s.questions.length) < Math.ceil(s.questions.length / 2));
+  if (autoRows.length === 0 && manual.length === 0) {
+    return `<div class="gaps-empty"><span class="gaps-empty-dot"></span>No weak blocker sections — all critical areas at 50%+ confirmed.</div>`;
+  }
+  let html = `<table class="gaps-table"><thead><tr>
+    <th style="width:110px">Section</th><th>Gap</th><th>Action to close</th>
+    <th style="width:66px">Owner</th><th style="width:60px">By</th><th style="width:20px"></th>
+  </tr></thead><tbody>`;
+  autoRows.forEach(s => {
+    html += `<tr>
+  <td><span class="gap-badge gap-blocker">${s.title}</span></td>
+  <td><input data-gap="${s.id}_gap" value="${esc(ov[s.id + '_gap'] || '')}" placeholder="What's missing?"></td>
+  <td><input data-gap="${s.id}_action" value="${esc(ov[s.id + '_action'] || '')}" placeholder="Next step to resolve"></td>
+  <td><input data-gap="${s.id}_owner" value="${esc(ov[s.id + '_owner'] || '')}" placeholder="Tim/Beth"></td>
+  <td><input data-gap="${s.id}_by" value="${esc(ov[s.id + '_by'] || '')}" placeholder="Jun 1"></td>
+  <td></td>
+</tr>`;
+  });
+  manual.forEach((r, i) => {
+    html += `<tr>
+  <td><span class="gap-badge gap-custom">${esc(r.section || 'Custom')}</span></td>
+  <td><input data-mgap="${i}_gap" value="${esc(r.gap || '')}" placeholder="What's missing?"></td>
+  <td><input data-mgap="${i}_action" value="${esc(r.action || '')}" placeholder="Next step to resolve"></td>
+  <td><input data-mgap="${i}_owner" value="${esc(r.owner || '')}" placeholder="Tim/Beth"></td>
+  <td><input data-mgap="${i}_by" value="${esc(r.by || '')}" placeholder="Jun 1"></td>
+  <td><button class="gap-rm" onclick="removeGapRow(${i})">×</button></td>
+</tr>`;
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
 function buildSnapshot() {
   const s = d().snapshot;
-  return `<div class="slide-label">Section 1</div>
-<div class="slide-title">Account snapshot</div>
+  return `<div class="slide-title">Account Snapshot</div>
 <div class="sec-div first">Firm overview</div>
 <div class="field-grid">
   <div>
@@ -727,8 +888,7 @@ function buildStakeholders() {
   <button class="sc-remove" onclick="removeStakeholder(${i})">remove</button>
 </div>`;
   }).join('');
-  return `<div class="slide-label">Section 2</div>
-<div class="slide-title">Stakeholder map</div>
+  return `<div class="slide-title">Stakeholder Map</div>
 <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
   ${['Economic buyer', 'Champion', 'Coach', 'Blocker', 'Neutral'].map(r => `<button class="action-btn" style="font-size:12px;padding:5px 12px" onclick="addStakeholder('${r}')">+ ${r}</button>`).join('')}
 </div>
@@ -740,172 +900,6 @@ function buildStakeholders() {
 </div>`;
 }
 
-function buildPov() {
-  const p = d().pov;
-  return `<div class="slide-label">Section 3</div>
-<div class="slide-title">Account POV</div>
-<div class="pov-grid">
-  <div class="pov-card">
-    <div class="pov-q">Why change?</div>
-    <textarea class="field-input" rows="3" data-f="pov.whyChange" placeholder="Cost of doing nothing? Pain today?">${esc(p.whyChange)}</textarea>
-  </div>
-  <div class="pov-card">
-    <div class="pov-q">Why now?</div>
-    <textarea class="field-input" rows="3" data-f="pov.whyNow" placeholder="Trigger event, renewal window, exec pressure?">${esc(p.whyNow)}</textarea>
-  </div>
-  <div class="pov-card">
-    <div class="pov-q">Why Eleven?</div>
-    <textarea class="field-input" rows="3" data-f="pov.whyUs" placeholder="Unique angle for this account specifically?">${esc(p.whyUs)}</textarea>
-  </div>
-  <div class="pov-card">
-    <div class="pov-q">What solution / value?</div>
-    <textarea class="field-input" rows="3" data-f="pov.whatSolution" placeholder="Which modules? Quantified ROI?">${esc(p.whatSolution)}</textarea>
-  </div>
-</div>
-<div class="sec-div">12-month objectives</div>
-<table class="obj-table">
-  <thead><tr>
-    <th style="width:80px">Owner</th>
-    <th>Objective</th>
-    <th style="width:120px">Target <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;opacity:0.7">Q# YYYY</span></th>
-  </tr></thead>
-  <tbody>
-    <tr><td>AE</td>
-      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.objective1" value="${esc(p.objective1)}" placeholder="e.g. Signed onboarding agreement"></td>
-      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.obj1date" value="${esc(p.obj1date)}" placeholder="Q2 2025"></td>
-    </tr>
-    <tr><td>AE</td>
-      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.objective2" value="${esc(p.objective2)}" placeholder="e.g. Principal demo completed"></td>
-      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.obj2date" value="${esc(p.obj2date)}" placeholder="Q3 2025"></td>
-    </tr>
-    <tr><td>AE/CSM</td>
-      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.objective3" value="${esc(p.objective3)}" placeholder="e.g. First data integration live"></td>
-      <td><input class="field-input" style="padding:4px 6px;font-size:12px" data-f="pov.obj3date" value="${esc(p.obj3date)}" placeholder="Q4 2025"></td>
-    </tr>
-  </tbody>
-</table>`;
-}
-
-function buildOpportunity() {
-  const o = d().opportunity;
-  const { yes, total } = calcScore();
-  const fc = calcForecast();
-  const blockerWeak = MEDD.filter(s => s.blocker && meddStatus(s.id, s.questions.length) === 'low').length;
-  return `<div class="slide-label">Section 4</div>
-<div class="slide-title">Opportunity & MEDDPICC</div>
-<div class="sec-div first">Whitespace & expansion</div>
-<div class="field-full">
-  <div class="field-label">Where is the opportunity?</div>
-  <textarea class="field-input" rows="2" data-f="opportunity.whitespace" placeholder="e.g. Core platform + reporting module; expansion to 2nd entity in Y2">${esc(o.whitespace)}</textarea>
-</div>
-<div class="sec-div">Competitive landscape</div>
-<div class="field-grid">
-  <div>
-    <div class="field-label">Real competition (name it)</div>
-    <textarea class="field-input" rows="2" data-f="opportunity.incumbents" placeholder="e.g. Addepar + Excel; internal ops team">${esc(o.incumbents)}</textarea>
-  </div>
-  <div>
-    <div class="field-label">Our strategy</div>
-    <div class="chip-group" style="margin-top:4px">
-      ${['Direct', 'Flank', 'Divide & conquer', 'Defend'].map(v => `<button class="chip${o.competitiveStrategy === v ? ' sel-blue' : ''}" onclick="setDeep('opportunity.competitiveStrategy','${v}');render()">${v}</button>`).join('')}
-    </div>
-    <textarea class="field-input" rows="2" style="margin-top:8px" data-f="opportunity.competitive" placeholder="How do we win?">${esc(o.competitive)}</textarea>
-  </div>
-</div>
-<div class="sec-div">MEDDPICC qualifier</div>
-<div class="medd-score-bar">
-  <div class="medd-score-card"><div class="lbl">Score</div><div class="val">${yes}/${total}</div></div>
-  <div class="medd-score-card"><div class="lbl">Sections green</div><div class="val">${MEDD.filter(s => meddStatus(s.id, s.questions.length) === 'full').length}/7</div></div>
-  <div class="medd-score-card"><div class="lbl">Blockers weak</div><div class="val" style="color:${blockerWeak > 0 ? 'var(--text-danger)' : 'var(--text-success)'}">${blockerWeak > 0 ? blockerWeak + ' weak' : 'Clear'}</div></div>
-  <div class="medd-score-card"><div class="lbl">Forecast</div><div class="val" style="font-size:14px;padding-top:3px"><span class="forecast-badge ${FC_CLASS[fc]}">${fc}</span></div></div>
-</div>
-${MEDD.map(s => buildMeddSection(s)).join('')}
-<div class="sec-div">Opportunity gaps & actions to close</div>
-<div style="font-size:11px;color:var(--text-tertiary);margin-bottom:8px">Blocker sections below 50% surface automatically.</div>
-${buildGapsTable()}
-<button class="gaps-add-btn" onclick="addGapRow()">+ Add gap manually</button>`;
-}
-
-function buildMeddSection(s) {
-  const isOpen = opp().openMedd.has(s.id);
-  const a = d().opportunity.meddAnswers;
-  const notes = d().opportunity.meddNotes;
-  const yes = meddYes(s.id, s.questions.length);
-  const total = s.questions.length;
-  const status = meddStatus(s.id, total);
-  const pips = Array.from({ length: total }, (_, i) => `<span class="pip ${i < yes ? (status === 'full' ? 'filled' : 'partial') : ''}"></span>`).join('');
-  let body = '';
-  if (isOpen) {
-    body = '<div class="medd-body">';
-    s.questions.forEach((q, i) => {
-      const key = s.id + '_' + i;
-      const val = a[key] || '';
-      body += `<div class="medd-question">
-  <div><div class="q-text">${q.text}</div><div class="q-tag">${q.tag}</div></div>
-  <div class="tog-group">
-    <button class="tog ${val === 'yes' ? 'yes' : ''}" onclick="setMeddAnswer('${s.id}',${i},'yes')">Yes</button>
-    <button class="tog ${val === 'no' ? 'no' : ''}" onclick="setMeddAnswer('${s.id}',${i},'no')">No</button>
-  </div>
-</div>`;
-    });
-    body += `<div class="medd-notes"><textarea rows="2" placeholder="Notes for ${s.title.toLowerCase()}…" onchange="setMeddNote('${s.id}',this.value)">${esc(notes[s.id] || '')}</textarea></div>`;
-    body += '</div>';
-  }
-  return `<div class="medd-section">
-  <div class="medd-section-header" onclick="toggleMedd('${s.id}')">
-    <div class="medd-left">
-      <div class="medd-icon"><svg viewBox="0 0 24 24">${s.icon}</svg></div>
-      <div>
-        <div class="medd-title-row">
-          <span class="medd-title">${s.title}</span>
-          ${s.blocker ? '<span class="blocker-tag">blocker</span>' : ''}
-        </div>
-        <div class="pip-row">${pips}</div>
-        <div class="medd-desc">${s.desc}</div>
-      </div>
-    </div>
-    <svg class="chevron ${isOpen ? 'open' : ''}" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-  </div>
-  ${body}
-</div>`;
-}
-
-function buildGapsTable() {
-  const ma = d().opportunity.meddAnswers;
-  const ov = d().opportunity.gapOverrides || {};
-  const manual = (ov.__manual || []);
-  const autoRows = MEDD.filter(s => s.blocker && meddYes(s.id, s.questions.length) < Math.ceil(s.questions.length / 2));
-  if (autoRows.length === 0 && manual.length === 0) {
-    return `<div class="gaps-empty"><span class="gaps-empty-dot"></span>No weak blocker sections — all critical areas at 50%+ confirmed.</div>`;
-  }
-  let html = `<table class="gaps-table"><thead><tr>
-    <th style="width:110px">Section</th><th>Gap</th><th>Action to close</th>
-    <th style="width:66px">Owner</th><th style="width:60px">By</th><th style="width:20px"></th>
-  </tr></thead><tbody>`;
-  autoRows.forEach(s => {
-    html += `<tr>
-  <td><span class="gap-badge gap-blocker">${s.title}</span></td>
-  <td><input data-gap="${s.id}_gap" value="${esc(ov[s.id + '_gap'] || '')}" placeholder="What's missing?"></td>
-  <td><input data-gap="${s.id}_action" value="${esc(ov[s.id + '_action'] || '')}" placeholder="Next step to resolve"></td>
-  <td><input data-gap="${s.id}_owner" value="${esc(ov[s.id + '_owner'] || '')}" placeholder="Tim/Beth"></td>
-  <td><input data-gap="${s.id}_by" value="${esc(ov[s.id + '_by'] || '')}" placeholder="Jun 1"></td>
-  <td></td>
-</tr>`;
-  });
-  manual.forEach((r, i) => {
-    html += `<tr>
-  <td><span class="gap-badge gap-custom">${esc(r.section || 'Custom')}</span></td>
-  <td><input data-mgap="${i}_gap" value="${esc(r.gap || '')}" placeholder="What's missing?"></td>
-  <td><input data-mgap="${i}_action" value="${esc(r.action || '')}" placeholder="Next step to resolve"></td>
-  <td><input data-mgap="${i}_owner" value="${esc(r.owner || '')}" placeholder="Tim/Beth"></td>
-  <td><input data-mgap="${i}_by" value="${esc(r.by || '')}" placeholder="Jun 1"></td>
-  <td><button class="gap-rm" onclick="removeGapRow(${i})">×</button></td>
-</tr>`;
-  });
-  html += '</tbody></table>';
-  return html;
-}
-
 function buildMap() {
   const m = d().map;
   const rows = (m.rows || []).map((r, i) => `<tr>
@@ -914,8 +908,7 @@ function buildMap() {
   <td><input data-map="${i}.action" value="${esc(r.action)}" placeholder="Action or milestone"></td>
   <td><select data-map="${i}.status">${['Open', 'In progress', 'Done', 'Blocked'].map(v => `<option ${r.status === v ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
 </tr>`).join('');
-  return `<div class="slide-label">Section 5</div>
-<div class="slide-title">Mutual action plan</div>
+  return `<div class="slide-title">Mutual Action Plan</div>
 <div class="ask-box">
   <div class="ask-label">🚩 #1 ask — what's needed to advance this deal?</div>
   <textarea rows="2" data-f="map.topAsk" placeholder="e.g. Principal introduction via Ian to validate data trust requirements…">${esc(m.topAsk)}</textarea>
@@ -970,14 +963,14 @@ function attachListeners() {
   });
   document.querySelectorAll('[data-gap]').forEach(el => {
     el.addEventListener('input', () => {
-      if (!d().opportunity.gapOverrides) d().opportunity.gapOverrides = { __manual: [] };
-      d().opportunity.gapOverrides[el.getAttribute('data-gap')] = el.value;
+      if (!d().meddpicc.gapOverrides) d().meddpicc.gapOverrides = { __manual: [] };
+      d().meddpicc.gapOverrides[el.getAttribute('data-gap')] = el.value;
     });
   });
   document.querySelectorAll('[data-mgap]').forEach(el => {
     el.addEventListener('input', () => {
       const [i, field] = el.getAttribute('data-mgap').split('_');
-      const m = d().opportunity.gapOverrides.__manual;
+      const m = d().meddpicc.gapOverrides.__manual;
       if (m && m[+i]) m[+i][field] = el.value;
     });
   });
@@ -1001,23 +994,23 @@ function toggleMedd(id) {
 }
 function setMeddAnswer(sid, qi, val) {
   const key = sid + '_' + qi;
-  const a = d().opportunity.meddAnswers;
+  const a = d().meddpicc.meddAnswers;
   if (a[key] === val) delete a[key]; else a[key] = val;
   renderCurrentSlide();
   renderHeaderScore();
 }
-function setMeddNote(sid, val) { d().opportunity.meddNotes[sid] = val; }
+function setMeddNote(sid, val) { d().meddpicc.meddNotes[sid] = val; }
 function addStakeholder(role) { d().stakeholders.push({ role, name: '', title: '', sentiment: 'Neutral', win: '' }); render(); }
 function removeStakeholder(i) { d().stakeholders.splice(i, 1); render(); }
 function setStkField(i, f, v) { if (d().stakeholders[i]) d().stakeholders[i][f] = v; }
 function addMapRow() { if (!d().map.rows) d().map.rows = []; d().map.rows.push({ date: '', owner: 'Eleven', action: '', status: 'Open' }); render(); }
 function addGapRow() {
-  if (!d().opportunity.gapOverrides) d().opportunity.gapOverrides = { __manual: [] };
-  if (!d().opportunity.gapOverrides.__manual) d().opportunity.gapOverrides.__manual = [];
-  d().opportunity.gapOverrides.__manual.push({ section: 'Custom', gap: '', action: '', owner: '', by: '' });
+  if (!d().meddpicc.gapOverrides) d().meddpicc.gapOverrides = { __manual: [] };
+  if (!d().meddpicc.gapOverrides.__manual) d().meddpicc.gapOverrides.__manual = [];
+  d().meddpicc.gapOverrides.__manual.push({ section: 'Custom', gap: '', action: '', owner: '', by: '' });
   render();
 }
-function removeGapRow(i) { d().opportunity.gapOverrides.__manual.splice(i, 1); render(); }
+function removeGapRow(i) { d().meddpicc.gapOverrides.__manual.splice(i, 1); render(); }
 function switchOpp(idx) { currentOpp = idx; render(); }
 function addOpp() {
   const name = prompt('Account / firm name:');
@@ -1060,8 +1053,8 @@ function exportPlan() {
 
   opps.forEach(a => {
     const s  = a.data.snapshot;
-    const p  = a.data.pov;
-    const o  = a.data.opportunity;
+    const p  = a.data.accountpov;
+    const o  = a.data.opppov;
     const m  = a.data.map;
     const ma = o.meddAnswers || {};
 
@@ -1108,8 +1101,8 @@ function exportPlan() {
   csv += csvRow(['Opportunity', 'Section', 'Blocker', 'Score', 'Q1', 'Q2', 'Q3', 'Q4', 'Notes']);
 
   opps.forEach(a => {
-    const ma    = a.data.opportunity.meddAnswers || {};
-    const notes = a.data.opportunity.meddNotes   || {};
+    const ma    = a.data.meddpicc.meddAnswers || {};
+    const notes = a.data.meddpicc.meddNotes   || {};
     MEDD.forEach(ms => {
       const answers = ms.questions.map((_, i) => ma[ms.id + '_' + i] === 'yes' ? 'Yes' : ma[ms.id + '_' + i] === 'no' ? 'No' : '');
       const sectionYes = answers.filter(v => v === 'Yes').length;
@@ -1128,8 +1121,8 @@ function exportPlan() {
   csv += csvRow(['Opportunity', 'Section', 'Type', 'Gap', 'Action to Close', 'Owner', 'By']);
 
   opps.forEach(a => {
-    const ma = a.data.opportunity.meddAnswers  || {};
-    const ov = a.data.opportunity.gapOverrides || {};
+    const ma = a.data.meddpicc.meddAnswers  || {};
+    const ov = a.data.meddpicc.gapOverrides || {};
     MEDD.filter(ms => ms.blocker &&
       ms.questions.filter((_, i) => ma[ms.id + '_' + i] === 'yes').length < Math.ceil(ms.questions.length / 2)
     ).forEach(ms => {
@@ -1170,7 +1163,7 @@ function setLog(entries) {
 
 function buildLogEntry(a) {
   const s = a.data.snapshot;
-  const o = a.data.opportunity;
+  const o = a.data.opppov;
   const m = a.data.map;
   const ma = o.meddAnswers || {};
   let yes = 0, total = 0;
@@ -1420,8 +1413,8 @@ async function analyseCall() {
 
   // Build plan context snapshot to send alongside the transcript
   const s   = d().snapshot;
-  const p   = d().pov;
-  const o   = d().opportunity;
+  const p   = d().accountpov;
+  const o   = d().opppov;
   const stk = d().stakeholders;
   const ma  = o.meddAnswers || {};
 
@@ -1549,18 +1542,18 @@ function acceptFinding(ci, fi) {
     if (field.startsWith('meddpicc.')) {
       const parts = field.split('.');
       const key = parts[1] + '_' + parts[2];
-      d().opportunity.meddAnswers[key] = value;
+      d().meddpicc.meddAnswers[key] = value;
     } else if (field.startsWith('pov.')) {
       const key = field.split('.')[1];
-      if (d().pov[key] !== undefined) d().pov[key] = value;
+      if (d().accountpov[key] !== undefined) d().accountpov[key] = value;
     } else if (field === 'map.nextTouch') {
       d().map.nextTouch = value;
     } else if (field === 'stakeholder.new') {
       d().stakeholders.push({ role: 'Neutral', name: value, title: '', sentiment: 'Neutral', win: '' });
     } else if (field.startsWith('gap.')) {
       const sid = field.split('.')[1];
-      if (!d().opportunity.gapOverrides) d().opportunity.gapOverrides = { __manual: [] };
-      d().opportunity.gapOverrides[sid + '_gap'] = value;
+      if (!d().meddpicc.gapOverrides) d().meddpicc.gapOverrides = { __manual: [] };
+      d().meddpicc.gapOverrides[sid + '_gap'] = value;
     }
   }
   renderCurrentSlide();
