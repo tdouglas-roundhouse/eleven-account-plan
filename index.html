@@ -382,10 +382,7 @@ select.field-input{cursor:pointer}
   <div class="main-wrap">
     <div class="content-area">
       <div id="slidesContainer"></div>
-      <div class="bottom-bar">
-        <button class="action-btn" onclick="saveToLog()">Save to log</button>
-        <button class="action-btn primary" onclick="exportPlan()">Export summary</button>
-      </div>
+      <div class="bottom-bar" id="bottomBar"></div>
     </div>
   </div>
 </div>
@@ -572,10 +569,10 @@ function freshData() {
   };
 }
 
-let opps = [{ name: 'New account', currentSlide: 0, openMedd: new Set(['metrics']), data: freshData() }];
+let opps = [];
 let currentOpp = 0;
-function opp() { return opps[currentOpp]; }
-function d() { return opp().data; }
+function opp() { return opps[currentOpp] || opps[0] || null; }
+function d() { return opp() ? opp().data : freshData(); }
 function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
 /* ================================================================
@@ -623,39 +620,48 @@ function render() {
   renderSidebar();
   renderCurrentSlide();
   renderHeaderScore();
+  renderBottomBar();
 }
 
 function renderHeaderScore() {
   const el = document.getElementById('headerScore');
   const saveEl = document.getElementById('saveIndicator');
-  if (showDashboard) {
+  // Only show score + forecast when inside an opportunity
+  if (showDashboard || showPipeline) {
     el.innerHTML = '';
     if (saveEl) el.appendChild(saveEl);
     return;
   }
   const { yes, total } = calcScore();
   const fc = calcForecast();
-  const hs = calcHealthScore();
-  const hsColor = hs >= 70 ? '#5DCAA5' : hs >= 40 ? '#EF9F27' : '#f09595';
   el.innerHTML = `<span class="sc">${yes}/${total}</span><span class="forecast-badge ${FC_CLASS[fc]}">${fc}</span>`;
   if (saveEl) el.appendChild(saveEl);
-  const healthEl = document.getElementById('sidebarHealth');
-  if (healthEl) {
-    healthEl.innerHTML = `<div><div class="sidebar-health-label">Deal health</div></div>
-      <div class="sidebar-health-score" style="color:${hsColor}">${hs}</div>
-      ${healthRingSVG(hs, 28, 3)}`;
+}
+
+function renderBottomBar() {
+  const bar = document.getElementById('bottomBar');
+  if (!bar) return;
+  if (showDashboard || showPipeline) {
+    // Overview and Pipeline: only export makes sense
+    bar.innerHTML = `<button class="action-btn primary" onclick="exportPlan()">Export summary</button>`;
+  } else {
+    // Inside an opportunity: save + export
+    bar.innerHTML = `
+      <button class="action-btn" onclick="saveToLog()">Save to log</button>
+      <button class="action-btn primary" onclick="exportPlan()">Export summary</button>`;
   }
 }
 
 function renderOppBar() {
   const bar = document.getElementById('oppBar');
   bar.innerHTML = '';
+  if (opps.length === 0) return;
   opps.forEach((a, i) => {
     const btn = document.createElement('button');
-    btn.className = 'opp-btn' + (!showDashboard && i === currentOpp ? ' active' : '');
+    btn.className = 'opp-btn' + (!showDashboard && !showPipeline && i === currentOpp ? ' active' : '');
     btn.textContent = a.name;
     btn.title = a.name;
-    btn.onclick = () => { showDashboard = false; currentOpp = i; opp().currentSlide = 1; render(); };
+    btn.onclick = () => { showDashboard = false; showPipeline = false; currentOpp = i; opp().currentSlide = 1; render(); };
     btn.ondblclick = () => { const n = prompt('Rename:', a.name); if (n && n.trim()) { opps[i].name = n.trim(); renderOppBar(); } };
     bar.appendChild(btn);
   });
@@ -671,16 +677,25 @@ function renderSidebar() {
   if (!nav) return;
   nav.innerHTML = '';
 
-  // Dashboard — top, styled as section header
+  // Shared pill style builder for top-level items (OVERVIEW / PIPELINE)
+  const topPillStyle = 'font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;border-radius:8px';
+
+  // OVERVIEW pill
   const dashBtn = document.createElement('button');
   dashBtn.className = 'nav-pill' + (showDashboard && !showPipeline ? ' active' : '');
-  dashBtn.style.cssText = 'border-bottom:0.5px solid rgba(255,255,255,0.08);border-radius:0;padding-bottom:12px;margin-bottom:4px;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600';
-  dashBtn.textContent = 'Overview';
+  dashBtn.style.cssText = topPillStyle;
+  dashBtn.textContent = 'OVERVIEW';
   dashBtn.onclick = () => { showDashboard = true; showPipeline = false; render(); };
   nav.appendChild(dashBtn);
 
-  // Opportunity sections — only when in an opp
+  // Opportunity section pills — only visible when inside an opp
   if (!showDashboard && !showPipeline) {
+    // Subtle divider label
+    const divLabel = document.createElement('div');
+    divLabel.style.cssText = 'font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:10px 10px 4px;font-weight:500';
+    divLabel.textContent = opp().name.length > 18 ? opp().name.slice(0, 16) + '…' : opp().name;
+    nav.appendChild(divLabel);
+
     SLIDES.filter(s => s.id !== 'dashboard' && s.id !== 'pipeline').forEach((s, i) => {
       const actualIdx = i + 1;
       const btn = document.createElement('button');
@@ -693,7 +708,7 @@ function renderSidebar() {
     });
   }
 
-  // Pipeline — pinned at bottom with divider
+  // Deal health — only when in an opp AND health score is meaningful (>0)
   const sidebar = document.querySelector('.sidebar');
   let healthEl = document.getElementById('sidebarHealth');
   if (!healthEl) {
@@ -701,31 +716,34 @@ function renderSidebar() {
     div.id = 'sidebarHealth';
     div.className = 'sidebar-health';
     sidebar.appendChild(div);
+    healthEl = div;
   }
   if (!showDashboard && !showPipeline) {
     const hs = calcHealthScore();
-    const hsColor = hs >= 70 ? '#5DCAA5' : hs >= 40 ? '#EF9F27' : '#f09595';
-    document.getElementById('sidebarHealth').innerHTML = `
-      <div><div class="sidebar-health-label">Deal health</div></div>
-      <div class="sidebar-health-score" style="color:${hsColor}">${hs}</div>
-      ${healthRingSVG(hs, 28, 3)}`;
+    if (hs > 0) {
+      const hsColor = hs >= 70 ? '#5DCAA5' : hs >= 40 ? '#EF9F27' : '#f09595';
+      healthEl.innerHTML = `
+        <div><div class="sidebar-health-label">Deal health</div></div>
+        <div class="sidebar-health-score" style="color:${hsColor}">${hs}</div>
+        ${healthRingSVG(hs, 28, 3)}`;
+    } else {
+      healthEl.innerHTML = '';
+    }
   } else {
-    document.getElementById('sidebarHealth').innerHTML = '';
+    healthEl.innerHTML = '';
   }
 
-  // Pipeline nav pill — always at very bottom of sidebar
+  // PIPELINE pill — pinned at bottom, same style as OVERVIEW
   let pipelineBtn = document.getElementById('pipelineNavBtn');
   if (!pipelineBtn) {
     pipelineBtn = document.createElement('button');
     pipelineBtn.id = 'pipelineNavBtn';
-    pipelineBtn.className = 'nav-pill';
-    pipelineBtn.style.cssText = 'margin-top:auto;border-top:0.5px solid rgba(255,255,255,0.08);border-radius:0;padding-top:12px';
     sidebar.appendChild(pipelineBtn);
   }
   pipelineBtn.className = 'nav-pill' + (showPipeline ? ' active' : '');
-  pipelineBtn.style.cssText = 'border-top:0.5px solid rgba(255,255,255,0.08);border-radius:0;padding-top:12px;margin-top:auto';
+  pipelineBtn.style.cssText = topPillStyle + ';border-top:0.5px solid rgba(255,255,255,0.08);border-radius:0 0 0 0;padding-top:12px;margin-top:auto;border-radius:8px';
   const logCount = getLog().length;
-  pipelineBtn.innerHTML = `Pipeline <span style="font-size:10px;font-weight:600;background:${showPipeline ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.12)'};color:rgba(255,255,255,0.8);border-radius:10px;padding:1px 7px;margin-left:4px">${logCount}</span>`;
+  pipelineBtn.innerHTML = `PIPELINE${logCount > 0 ? ` <span style="font-size:10px;font-weight:600;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);border-radius:10px;padding:1px 7px;margin-left:4px;letter-spacing:0">${logCount}</span>` : ''}`;
   pipelineBtn.onclick = () => { showPipeline = true; showDashboard = false; render(); };
 }
 
@@ -873,6 +891,7 @@ function oppForecast(a) {
    ================================================================ */
 
 function buildDashboard() {
+  if (opps.length === 0) return buildOnboarding();
   const realOpps = opps.filter(a => a.data.snapshot.firmName || a.data.stakeholders.length || (a.data.meddpicc && Object.keys(a.data.meddpicc.meddAnswers || {}).length));
   if (realOpps.length === 0) return buildOnboarding();
 
